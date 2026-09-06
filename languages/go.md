@@ -18,6 +18,8 @@ go run .
 - Interfaces are implemented implicitly.
 - Goroutines are cheap, but they still need ownership/cancellation/backpressure decisions.
 - Strings are immutable byte sequences containing UTF-8 by convention; `range` over a string decodes runes.
+- A slice passed downstream shares its backing array. `append` can mutate callers or leave a stale header.
+- `conn.Write` can be a short write. Loop or use `io.Copy` / `io.ReadFull` for protocol framing.
 
 ## Construct lookup
 

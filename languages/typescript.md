@@ -19,6 +19,8 @@ npx tsc --noEmit
 - Node APIs (`Buffer`, `net`, `fs`) are runtime APIs, not TypeScript language features.
 - `async`/`await` is Promise-based cooperative async I/O, not Java threads.
 - Be deliberate about `undefined` vs `null`; most TS APIs lean heavily on `undefined`.
+- Node `net` is event-driven. `data` chunks are not message boundaries; you reassemble frames yourself.
+- I/O snippets here are Node (`process`, `fs`, `net`). Deno, Bun, and the browser are different runtimes.
 
 ## Construct lookup
 

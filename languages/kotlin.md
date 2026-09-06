@@ -17,6 +17,7 @@ This is a **lookup sheet**, not a tutorial. Start with the concept you already k
 - Exceptions are unchecked. There is no Java-style checked-exception contract.
 - Extension functions are statically dispatched; they do not add virtual methods to the receiver.
 - For JVM CodeCrafters challenges, Java networking/file APIs remain available, but prefer Kotlin idioms around them.
+- `read()` on a stream can return a short count or -1 at EOF. Buffer before you parse a protocol frame.
 
 ## Construct lookup
 

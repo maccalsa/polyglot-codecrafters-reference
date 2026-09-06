@@ -20,6 +20,8 @@ gleam format
 - Gleam targets Erlang or JavaScript. Some practical APIs (files, sockets, processes) are target/runtime packages rather than `gleam_stdlib`.
 - On BEAM, concurrency is actor/process-oriented rather than shared-memory threading.
 - Prefer pipelines and small functions, but don't force a pipeline where a `case` communicates the branching more clearly.
+- Files, env, argv, and TCP live in packages (`simplifile`, `envoy`, `argv`, `glisten`, `mug`) — never in `gleam_stdlib`.
+- There is no accept-loop or `defer`. You write handlers and `result.try` pipelines.
 
 ## Construct lookup
 

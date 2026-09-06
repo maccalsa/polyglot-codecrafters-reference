@@ -20,6 +20,8 @@ cargo check
 - Iteration has ownership choices: `iter()`, `iter_mut()`, `into_iter()`.
 - `Drop` gives deterministic cleanup without `finally`/try-with-resources.
 - Don't fight the borrow checker by cloning everything; first ask who should own the data.
+- `&s[i..j]` and `&buf[i..j]` borrow. The owner of the request buffer must outlive parsed views.
+- Use `read_until` / `read_exact` / `write_all` instead of a single `read`/`write` for protocol frames.
 
 ## Construct lookup
 

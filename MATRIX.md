@@ -4,11 +4,15 @@
 
 Targets: **Kotlin · Python · Go · TypeScript · Rust · Odin · Gleam**. Java is the reference column.
 
+This file is generated from `reference.json` by `scripts/build.py`. Edit the JSON, then run the build.
+
 This is deliberately CodeCrafters-oriented: bytes, parsing, files, sockets, tests, errors, and concurrency are included alongside language syntax.
+
+59 constructs.
 
 ## Fundamentals
 
-### Immutable binding
+### Immutable binding — *partial match*
 
 **Java**
 ```java
@@ -22,13 +26,17 @@ val x = 42
 
 **Python**
 ```python
-x = 42  # no language-level const
+x = 42
 ```
+
+> No language-level const; convention and discipline only.
 
 **Go**
 ```go
-x := 42  // binding itself is mutable
+x := 42
 ```
+
+> The binding itself is mutable. There is no val/const for locals.
 
 **TypeScript**
 ```ts
@@ -42,13 +50,16 @@ let x = 42;
 
 **Odin**
 ```odin
-x := 42  // variable; use :: for constants
+x := 42
 ```
+
+> := creates a variable. Use :: for compile-time constants.
 
 **Gleam**
 ```gleam
 let x = 42
 ```
+
 
 ### Constant
 
@@ -62,10 +73,14 @@ static final int PORT = 6379;
 const val PORT = 6379
 ```
 
+> const val is compile-time. Use val for runtime constants.
+
 **Python**
 ```python
-PORT = 6379  # convention: uppercase
+PORT = 6379
 ```
+
+> Uppercase is convention only; the name remains assignable.
 
 **Go**
 ```go
@@ -92,7 +107,8 @@ PORT :: 6379
 const port = 6379
 ```
 
-### Mutable variable
+
+### Mutable variable — *partial match*
 
 **Java**
 ```java
@@ -138,10 +154,12 @@ x = 2
 
 **Gleam**
 ```gleam
-// bindings are immutable
 let x = 1
-let x = 2  // shadowing
+let x = 2
 ```
+
+> Bindings are immutable. Reusing the name is shadowing, not mutation.
+
 
 ### Function
 
@@ -198,6 +216,7 @@ fn add(a: Int, b: Int) -> Int {
 }
 ```
 
+
 ### Anonymous function / lambda
 
 **Java**
@@ -240,11 +259,14 @@ proc(x: int) -> int { return x * 2 }
 fn(x) { x * 2 }
 ```
 
+
 ### Generic function
 
 **Java**
 ```java
-static <T> T id(T x) { return x; }
+static <T> T id(T x) {
+  return x;
+}
 ```
 
 **Kotlin**
@@ -255,46 +277,60 @@ fun <T> id(x: T): T = x
 **Python**
 ```python
 def id[T](x: T) -> T:
-    return x  # Python 3.12+
+    return x
 ```
+
+> Type-parameter syntax is 3.12+. Earlier: TypeVar.
 
 **Go**
 ```go
-func id[T any](x T) T { return x }
+func id[T any](x T) T {
+    return x
+}
 ```
 
 **TypeScript**
 ```ts
-function id<T>(x: T): T { return x }
+function id<T>(x: T): T {
+  return x
+}
 ```
 
 **Rust**
 ```rust
-fn id<T>(x: T) -> T { x }
+fn id<T>(x: T) -> T {
+    x
+}
 ```
 
 **Odin**
 ```odin
-id :: proc(x: $T) -> T { return x }
+id :: proc(x: $T) -> T {
+    return x
+}
 ```
 
 **Gleam**
 ```gleam
-fn id(x: a) -> a { x }
+fn id(x: a) -> a {
+  x
+}
 ```
 
-### Tuple / pair
+
+### Tuple / pair — *partial match*
 
 **Java**
 ```java
-record Pair<A,B>(A first, B second) {}
+record Pair<A, B>(A first, B second) {}
 ```
 
 **Kotlin**
 ```kotlin
 val p = 1 to "a"
-// Pair<Int, String>
 ```
+
+> to builds Pair<A, B>.
 
 **Python**
 ```python
@@ -303,9 +339,10 @@ p = (1, "a")
 
 **Go**
 ```go
-// multiple return values are idiomatic
 return 1, "a"
 ```
+
+> Multiple return values are the idiom; there is no first-class tuple.
 
 **TypeScript**
 ```ts
@@ -319,15 +356,82 @@ let p: (i32, &str) = (1, "a");
 
 **Odin**
 ```odin
-// no general first-class tuple type
-// use a small struct, or multiple return values:
 a, b := get_pair()
 ```
+
+> No general tuple type. Use a small struct or multiple return values.
 
 **Gleam**
 ```gleam
 let p = #(1, "a")
 ```
+
+
+### Entry point / main
+
+**Java**
+```java
+public static void main(String[] args) {
+  ...
+}
+```
+
+**Kotlin**
+```kotlin
+fun main(args: Array<String>) {
+  ...
+}
+```
+
+**Python**
+```python
+def main() -> None:
+    ...
+
+if __name__ == "__main__":
+    main()
+```
+
+**Go**
+```go
+func main() {
+    ...
+}
+```
+
+> Must live in package main.
+
+**TypeScript**
+```ts
+async function main() {
+  ...
+}
+main()
+```
+
+> Node treats the launched file as the entry. Browser/Deno differ.
+
+**Rust**
+```rust
+fn main() {
+    ...
+}
+```
+
+**Odin**
+```odin
+main :: proc() {
+    ...
+}
+```
+
+**Gleam**
+```gleam
+pub fn main() {
+  ...
+}
+```
+
 
 ## Types
 
@@ -361,7 +465,10 @@ type User struct {
 
 **TypeScript**
 ```ts
-type User = { name: string; age: number }
+type User = {
+  name: string
+  age: number
+}
 ```
 
 **Rust**
@@ -387,7 +494,8 @@ pub type User {
 }
 ```
 
-### Interface / trait / protocol
+
+### Interface / trait / protocol — *wrong Java model*
 
 **Java**
 ```java
@@ -416,6 +524,8 @@ type Reader interface {
 }
 ```
 
+> Satisfied implicitly; no implements clause.
+
 **TypeScript**
 ```ts
 interface Reader {
@@ -432,17 +542,24 @@ trait Reader {
 
 **Odin**
 ```odin
-// no interface construct; use procedures,
-// tagged unions, or procedure fields
+Reader :: struct {
+    read: proc(r: ^Reader) -> []u8,
+}
 ```
+
+> No interface construct. Use procedure fields, tagged unions, or plain procedures.
 
 **Gleam**
 ```gleam
-// no interfaces/typeclasses; model behaviour
-// with functions and custom types
+pub fn read(r: Reader) -> BitArray {
+  r.read(r)
+}
 ```
 
-### Enum / sum type
+> No typeclasses. Pass functions and custom types; do not look for implements.
+
+
+### Enum / sum type — *partial match*
 
 **Java**
 ```java
@@ -454,19 +571,29 @@ record Quit() implements Msg {}
 **Kotlin**
 ```kotlin
 sealed interface Msg
-data class Ping(val id: Int): Msg
-data object Quit: Msg
+data class Ping(val id: Int) : Msg
+data object Quit : Msg
 ```
 
 **Python**
 ```python
-type Msg = Ping | Quit  # 3.12 type alias
+type Msg = Ping | Quit
 ```
+
+> 3.12+ type alias. Define Ping/Quit as dataclasses or NamedTuples.
 
 **Go**
 ```go
-// usually tagged struct/interface; no native sum type
+type Msg interface{ isMsg() }
+
+type Ping struct{ ID int }
+type Quit struct{}
+
+func (Ping) isMsg() {}
+func (Quit) isMsg() {}
 ```
+
+> No native sum type. A sealed interface plus tagged structs is the usual stand-in.
 
 **TypeScript**
 ```ts
@@ -485,7 +612,10 @@ enum Msg {
 
 **Odin**
 ```odin
-Msg :: union { Ping, Quit }
+Msg :: union {
+    Ping,
+    Quit,
+}
 ```
 
 **Gleam**
@@ -496,7 +626,8 @@ pub type Msg {
 }
 ```
 
-### Optional / nullable
+
+### Optional / nullable — *partial match*
 
 **Java**
 ```java
@@ -515,9 +646,10 @@ name: str | None
 
 **Go**
 ```go
-// often pointer or (value, ok)
 var name *string
 ```
+
+> Pointer or (value, ok). nil is not Optional.
 
 **TypeScript**
 ```ts
@@ -532,15 +664,17 @@ let name: Option<String>
 **Odin**
 ```odin
 name: Maybe(string)
-// core APIs also commonly use (value, ok)
 ```
+
+> Maybe(T) exists; many core APIs still use (value, ok).
 
 **Gleam**
 ```gleam
 let name: Option(String)
 ```
 
-### Default when missing
+
+### Default when missing — *partial match*
 
 **Java**
 ```java
@@ -559,8 +693,12 @@ n = value if value is not None else "default"
 
 **Go**
 ```go
-if value == "" { value = "default" }
+if value == "" {
+    value = "default"
+}
 ```
+
+> Empty string is not absence. Prefer comma-ok on maps and pointers for missing values.
 
 **TypeScript**
 ```ts
@@ -574,17 +712,20 @@ let n = value.unwrap_or("default");
 
 **Odin**
 ```odin
-n := value.? or_else "default"  // for Maybe(string)
+n := value.? or_else "default"
 ```
+
+> or_else is for Maybe(T). Comma-ok APIs need an explicit check.
 
 **Gleam**
 ```gleam
 let n = option.unwrap(value, "default")
 ```
 
+
 ## Control flow
 
-### If / else
+### If / else — *partial match*
 
 **Java**
 ```java
@@ -656,7 +797,10 @@ case x > 0 {
 }
 ```
 
-### Pattern match / switch
+> No if statement. case on Bool (or a richer type) is the branch.
+
+
+### Pattern match / switch — *partial match*
 
 **Java**
 ```java
@@ -677,8 +821,10 @@ when (msg) {
 **Python**
 ```python
 match msg:
-    case Ping(id): ...
-    case Quit(): ...
+    case Ping(id):
+        ...
+    case Quit():
+        ...
 ```
 
 **Go**
@@ -686,13 +832,19 @@ match msg:
 switch v := msg.(type) {
 case Ping:
     _ = v
+case Quit:
+    ...
 }
 ```
 
 **TypeScript**
 ```ts
 switch (msg.kind) {
-  case "ping": ...
+  case "ping":
+    ...
+    break
+  case "quit":
+    ...
 }
 ```
 
@@ -722,16 +874,21 @@ case msg {
 }
 ```
 
+
 ### For each
 
 **Java**
 ```java
-for (var x : xs) { ... }
+for (var x : xs) {
+  ...
+}
 ```
 
 **Kotlin**
 ```kotlin
-for (x in xs) { ... }
+for (x in xs) {
+  ...
+}
 ```
 
 **Python**
@@ -773,6 +930,9 @@ for x in xs {
 list.each(xs, fn(x) { ... })
 ```
 
+> list.each is for side effects. Prefer list.map / list.filter for values.
+
+
 ### Index + value iteration
 
 **Java**
@@ -784,7 +944,9 @@ for (int i = 0; i < xs.size(); i++) {
 
 **Kotlin**
 ```kotlin
-for ((i, x) in xs.withIndex()) { ... }
+for ((i, x) in xs.withIndex()) {
+  ...
+}
 ```
 
 **Python**
@@ -802,12 +964,16 @@ for i, x := range xs {
 
 **TypeScript**
 ```ts
-for (const [i, x] of xs.entries()) { ... }
+for (const [i, x] of xs.entries()) {
+  ...
+}
 ```
 
 **Rust**
 ```rust
-for (i, x) in xs.iter().enumerate() { ... }
+for (i, x) in xs.iter().enumerate() {
+    ...
+}
 ```
 
 **Odin**
@@ -822,16 +988,23 @@ for x, i in xs {
 list.index_map(xs, fn(x, i) { ... })
 ```
 
-### While loop
+> index_map returns a new list. It is not a side-effecting for-loop.
+
+
+### While loop — *partial match*
 
 **Java**
 ```java
-while (condition) { ... }
+while (condition) {
+  ...
+}
 ```
 
 **Kotlin**
 ```kotlin
-while (condition) { ... }
+while (condition) {
+  ...
+}
 ```
 
 **Python**
@@ -847,14 +1020,20 @@ for condition {
 }
 ```
 
+> for is the only loop. while condition is for condition { }.
+
 **TypeScript**
 ```ts
-while (condition) { ... }
+while (condition) {
+  ...
+}
 ```
 
 **Rust**
 ```rust
-while condition { ... }
+while condition {
+    ...
+}
 ```
 
 **Odin**
@@ -864,16 +1043,28 @@ for condition {
 }
 ```
 
+> Same as Go: for is while when given only a condition.
+
 **Gleam**
 ```gleam
-// no while loop; use recursion or iterator/list functions
+fn loop(n: Int) -> Int {
+  case n > 0 {
+    True -> loop(n - 1)
+    False -> n
+  }
+}
 ```
 
-### Early return
+> No while. Recurse, or use list/iterator functions.
+
+
+### Early return — *wrong Java model*
 
 **Java**
 ```java
-if (bad) return result;
+if (bad) {
+  return result;
+}
 ```
 
 **Kotlin**
@@ -901,22 +1092,31 @@ if (bad) return result
 
 **Rust**
 ```rust
-if bad { return result; }
+if bad {
+    return result;
+}
 ```
 
 **Odin**
 ```odin
-if bad { return result }
+if bad {
+    return result
+}
 ```
 
 **Gleam**
 ```gleam
-// structure with case/result pipelines; no imperative early-return idiom
+use x <- result.try(parse(s))
+use y <- result.try(validate(x))
+Ok(y)
 ```
+
+> No imperative early return. Structure with case or result.try pipelines.
+
 
 ## Collections
 
-### List / dynamic sequence
+### List / dynamic sequence — *partial match*
 
 **Java**
 ```java
@@ -954,12 +1154,17 @@ xs := make([dynamic]int)
 defer delete(xs)
 ```
 
+> Dynamic arrays allocate. You own the memory until delete.
+
 **Gleam**
 ```gleam
 let xs: List(Int) = []
 ```
 
-### Fixed / contiguous array
+> Linked list, not a growable array. Prepend is cheap; append is not.
+
+
+### Fixed / contiguous array — *partial match*
 
 **Java**
 ```java
@@ -973,9 +1178,10 @@ val xs = IntArray(16)
 
 **Python**
 ```python
-# list is usual general sequence
 xs = [0] * 16
 ```
+
+> list is the usual sequence. array.array / bytearray when you need packed storage.
 
 **Go**
 ```go
@@ -999,9 +1205,11 @@ xs: [16]int
 
 **Gleam**
 ```gleam
-// List is linked; BitArray for bytes.
-// No general mutable array in core language.
+let bytes: BitArray = <<0, 0, 0, 0>>
 ```
+
+> List is linked. BitArray is for bytes. No general mutable array in the core language.
+
 
 ### Map / dictionary creation
 
@@ -1030,6 +1238,8 @@ m := make(map[string]int)
 const m = new Map<string, number>()
 ```
 
+> Map is not a plain object. Objects do not have a reliable key order or typed keys.
+
 **Rust**
 ```rust
 let mut m = HashMap::<String, i32>::new();
@@ -1046,18 +1256,23 @@ defer delete(m)
 let m = dict.new()
 ```
 
+
 ### Map lookup with presence
 
 **Java**
 ```java
 var v = m.get(key);
-if (v != null) { ... }
+if (v != null) {
+  ...
+}
 ```
 
 **Kotlin**
 ```kotlin
 val v = m[key]
-if (v != null) { ... }
+if (v != null) {
+  ...
+}
 ```
 
 **Python**
@@ -1069,24 +1284,34 @@ if key in m:
 **Go**
 ```go
 v, ok := m[key]
-if ok { ... }
+if ok {
+    ...
+}
 ```
+
+> m[key] without ok returns the zero value for missing keys.
 
 **TypeScript**
 ```ts
 const v = m.get(key)
-if (v !== undefined) { ... }
+if (v !== undefined) {
+  ...
+}
 ```
 
 **Rust**
 ```rust
-if let Some(v) = m.get(&key) { ... }
+if let Some(v) = m.get(&key) {
+    ...
+}
 ```
 
 **Odin**
 ```odin
 v, ok := m[key]
-if ok { ... }
+if ok {
+    ...
+}
 ```
 
 **Gleam**
@@ -1097,7 +1322,8 @@ case dict.get(m, key) {
 }
 ```
 
-### Set creation
+
+### Set creation — *partial match*
 
 **Java**
 ```java
@@ -1119,6 +1345,8 @@ s: set[str] = set()
 s := map[string]struct{}{}
 ```
 
+> No set type. map[T]struct{} is the usual idiom.
+
 **TypeScript**
 ```ts
 const s = new Set<string>()
@@ -1131,19 +1359,25 @@ let mut s = HashSet::<String>::new();
 
 **Odin**
 ```odin
-// idiom: map[T]struct{} or bit_set for enum-like keys
+s := make(map[string]struct{})
+defer delete(s)
 ```
+
+> Same map[T]struct{} idiom, or bit_set for enum-like keys.
 
 **Gleam**
 ```gleam
 let s = set.new()
 ```
 
+
 ### Filter
 
 **Java**
 ```java
-var ys = xs.stream().filter(x -> x > 0).toList();
+var ys = xs.stream()
+    .filter(x -> x > 0)
+    .toList();
 ```
 
 **Kotlin**
@@ -1159,7 +1393,11 @@ ys = [x for x in xs if x > 0]
 **Go**
 ```go
 ys := make([]int, 0, len(xs))
-for _, x := range xs { if x > 0 { ys = append(ys, x) } }
+for _, x := range xs {
+    if x > 0 {
+        ys = append(ys, x)
+    }
+}
 ```
 
 **TypeScript**
@@ -1169,13 +1407,19 @@ const ys = xs.filter(x => x > 0)
 
 **Rust**
 ```rust
-let ys: Vec<_> = xs.into_iter().filter(|x| *x > 0).collect();
+let ys: Vec<_> = xs.into_iter()
+    .filter(|x| *x > 0)
+    .collect();
 ```
 
 **Odin**
 ```odin
 ys := make([dynamic]int)
-for x in xs { if x > 0 { append(&ys, x) } }
+for x in xs {
+    if x > 0 {
+        append(&ys, x)
+    }
+}
 ```
 
 **Gleam**
@@ -1183,11 +1427,14 @@ for x in xs { if x > 0 { append(&ys, x) } }
 let ys = list.filter(xs, fn(x) { x > 0 })
 ```
 
+
 ### Map / transform
 
 **Java**
 ```java
-var ys = xs.stream().map(x -> x * 2).toList();
+var ys = xs.stream()
+    .map(x -> x * 2)
+    .toList();
 ```
 
 **Kotlin**
@@ -1203,7 +1450,9 @@ ys = [x * 2 for x in xs]
 **Go**
 ```go
 ys := make([]int, len(xs))
-for i, x := range xs { ys[i] = x * 2 }
+for i, x := range xs {
+    ys[i] = x * 2
+}
 ```
 
 **TypeScript**
@@ -1213,19 +1462,24 @@ const ys = xs.map(x => x * 2)
 
 **Rust**
 ```rust
-let ys: Vec<_> = xs.into_iter().map(|x| x * 2).collect();
+let ys: Vec<_> = xs.into_iter()
+    .map(|x| x * 2)
+    .collect();
 ```
 
 **Odin**
 ```odin
 ys := make([dynamic]int)
-for x in xs { append(&ys, x*2) }
+for x in xs {
+    append(&ys, x * 2)
+}
 ```
 
 **Gleam**
 ```gleam
 let ys = list.map(xs, fn(x) { x * 2 })
 ```
+
 
 ### Fold / reduce
 
@@ -1247,7 +1501,9 @@ total = sum(xs)
 **Go**
 ```go
 total := 0
-for _, x := range xs { total += x }
+for _, x := range xs {
+    total += x
+}
 ```
 
 **TypeScript**
@@ -1263,13 +1519,16 @@ let total: i32 = xs.iter().sum();
 **Odin**
 ```odin
 total := 0
-for x in xs { total += x }
+for x in xs {
+    total += x
+}
 ```
 
 **Gleam**
 ```gleam
 let total = list.fold(xs, 0, fn(acc, x) { acc + x })
 ```
+
 
 ## Strings & bytes
 
@@ -1279,6 +1538,8 @@ let total = list.fold(xs, 0, fn(acc, x) { acc + x })
 ```java
 var s = "port=" + port;
 ```
+
+> No interpolation in everyday Java. STR templates exist but are still preview/unstable across versions.
 
 **Kotlin**
 ```kotlin
@@ -1315,7 +1576,8 @@ s := fmt.tprintf("port=%d", port)
 let s = "port=" <> int.to_string(port)
 ```
 
-### UTF-8 string → bytes
+
+### UTF-8 string → bytes — *partial match*
 
 **Java**
 ```java
@@ -1347,18 +1609,22 @@ const b = new TextEncoder().encode(s)
 let b = s.as_bytes();
 ```
 
+> as_bytes borrows. Clone with s.into_bytes() if you need an owned Vec<u8>.
+
 **Odin**
 ```odin
-b := transmute([]u8)s  // view; do not mutate
-// clone if ownership/mutation is needed
+b := transmute([]u8)s
 ```
+
+> transmute is a view. Do not mutate. Clone if you need ownership.
 
 **Gleam**
 ```gleam
 let b = bit_array.from_string(s)
 ```
 
-### Bytes → UTF-8 string
+
+### Bytes → UTF-8 string — *partial match*
 
 **Java**
 ```java
@@ -1390,15 +1656,22 @@ const s = new TextDecoder().decode(b)
 let s = std::str::from_utf8(&b)?;
 ```
 
+> Fails on invalid UTF-8. Use from_utf8_lossy if you want replacement.
+
 **Odin**
 ```odin
-s := string(b)  // conversion semantics matter; clone if lifetime requires
+s := string(b)
 ```
+
+> Conversion semantics and lifetime matter; clone if the bytes will move.
 
 **Gleam**
 ```gleam
-let result = bit_array.to_string(b)  // Result(String, Nil)
+let result = bit_array.to_string(b)
 ```
+
+> Result(String, Nil).
+
 
 ### Split string
 
@@ -1406,6 +1679,8 @@ let result = bit_array.to_string(b)  // Result(String, Nil)
 ```java
 var parts = s.split(":", -1);
 ```
+
+> Limit -1 keeps trailing empty strings. The no-limit overload discards them.
 
 **Kotlin**
 ```kotlin
@@ -1442,6 +1717,7 @@ parts := strings.split(s, ":")
 let parts = string.split(s, ":")
 ```
 
+
 ### Parse integer
 
 **Java**
@@ -1452,8 +1728,9 @@ int n = Integer.parseInt(s);
 **Kotlin**
 ```kotlin
 val n = s.toInt()
-// or toIntOrNull()
 ```
+
+> toInt() throws. toIntOrNull() if absence is expected.
 
 **Python**
 ```python
@@ -1470,6 +1747,8 @@ n, err := strconv.Atoi(s)
 const n = Number.parseInt(s, 10)
 ```
 
+> Always pass radix 10. parseInt("08") without it is not your friend in older JS.
+
 **Rust**
 ```rust
 let n: i32 = s.parse()?;
@@ -1478,17 +1757,220 @@ let n: i32 = s.parse()?;
 **Odin**
 ```odin
 n, ok := strconv.parse_int(s)
-// inspect returned type/options for your Odin version
+```
+
+> Inspect the returned type/options for your compiler version.
+
+**Gleam**
+```gleam
+let result = int.parse(s)
+```
+
+> Result(Int, Nil).
+
+
+### Starts-with / prefix
+
+**Java**
+```java
+s.startsWith("+")
+```
+
+**Kotlin**
+```kotlin
+s.startsWith("+")
+```
+
+**Python**
+```python
+s.startswith("+")
+```
+
+**Go**
+```go
+strings.HasPrefix(s, "+")
+```
+
+**TypeScript**
+```ts
+s.startsWith("+")
+```
+
+**Rust**
+```rust
+s.starts_with('+')
+```
+
+**Odin**
+```odin
+strings.has_prefix(s, "+")
 ```
 
 **Gleam**
 ```gleam
-let result = int.parse(s)  // Result(Int, Nil)
+string.starts_with(s, "+")
 ```
+
+
+### Trim whitespace
+
+**Java**
+```java
+s.trim()
+```
+
+**Kotlin**
+```kotlin
+s.trim()
+```
+
+**Python**
+```python
+s.strip()
+```
+
+**Go**
+```go
+strings.TrimSpace(s)
+```
+
+**TypeScript**
+```ts
+s.trim()
+```
+
+**Rust**
+```rust
+s.trim()
+```
+
+**Odin**
+```odin
+strings.trim_space(s)
+```
+
+**Gleam**
+```gleam
+string.trim(s)
+```
+
+
+### Byte / string slice — *wrong Java model*
+
+**Java**
+```java
+var part = s.substring(i, j);
+var bytes = Arrays.copyOfRange(b, i, j);
+```
+
+**Kotlin**
+```kotlin
+val part = s.substring(i, j)
+val bytes = b.copyOfRange(i, j)
+```
+
+**Python**
+```python
+part = s[i:j]
+bytes = b[i:j]
+```
+
+**Go**
+```go
+part := s[i:j]
+bytes := b[i:j]
+```
+
+> Slices share the backing array. A downstream append can mutate callers.
+
+**TypeScript**
+```ts
+const part = s.slice(i, j)
+const bytes = b.subarray(i, j)
+```
+
+> subarray is a view; slice() on Uint8Array copies.
+
+**Rust**
+```rust
+let part = &s[i..j];
+let bytes = &b[i..j];
+```
+
+> This is a borrow. The owner of s/b must outlive the slice.
+
+**Odin**
+```odin
+part := s[i:j]
+bytes := b[i:j]
+```
+
+> Slices are views. Copy if you need an independent buffer.
+
+**Gleam**
+```gleam
+let part = string.slice(s, i, j - i)
+let bytes = bit_array.slice(b, i, j - i)
+```
+
+> slice takes start + length, not start + end.
+
+
+### Append bytes to a buffer — *partial match*
+
+**Java**
+```java
+var buf = new ByteArrayOutputStream();
+buf.write(data);
+```
+
+**Kotlin**
+```kotlin
+val buf = ByteArrayOutputStream()
+buf.write(data)
+```
+
+**Python**
+```python
+buf = bytearray()
+buf.extend(data)
+```
+
+**Go**
+```go
+buf = append(buf, data...)
+```
+
+> append may reallocate. Reassign the result; the old slice header can be stale.
+
+**TypeScript**
+```ts
+buf = Buffer.concat([buf, data])
+```
+
+> Node Buffer. In the browser, concatenate Uint8Array manually.
+
+**Rust**
+```rust
+buf.extend_from_slice(data);
+```
+
+**Odin**
+```odin
+append(&buf, ..data)
+```
+
+**Gleam**
+```gleam
+let buf = bit_array.append(buf, data)
+```
+
+> Immutable. append returns a new BitArray.
+
 
 ## Errors & resources
 
-### Represent recoverable error
+### Represent recoverable error — *wrong Java model*
 
 **Java**
 ```java
@@ -1497,13 +1979,17 @@ T method() throws IOException
 
 **Kotlin**
 ```kotlin
-fun method(): T  // exceptions unchecked
+fun method(): T
 ```
+
+> Exceptions are unchecked. There is no throws clause.
 
 **Python**
 ```python
-def method() -> T:  # raises exception
+def method() -> T:
 ```
+
+> Raise an exception. Typing does not encode failure.
 
 **Go**
 ```go
@@ -1512,8 +1998,10 @@ func method() (T, error)
 
 **TypeScript**
 ```ts
-function method(): T  // throw, or use an explicit Result union
+function method(): T
 ```
+
+> throw, or make failure explicit with a Result union.
 
 **Rust**
 ```rust
@@ -1523,41 +2011,53 @@ fn method() -> Result<T, E>
 **Odin**
 ```odin
 method :: proc() -> (T, Error)
-// explicit multi-return is common
 ```
+
+> Explicit multi-return is the common shape.
 
 **Gleam**
 ```gleam
 fn method() -> Result(T, E)
 ```
 
-### Propagate error
+
+### Propagate error — *wrong Java model*
 
 **Java**
 ```java
-return method(); // or throws
+return method();
 ```
+
+> Or declare throws and let it escape.
 
 **Kotlin**
 ```kotlin
-return method()  // exception propagates
+return method()
 ```
+
+> Unchecked exceptions propagate automatically.
 
 **Python**
 ```python
-return method()  # exception propagates
+return method()
 ```
+
+> Exceptions propagate automatically.
 
 **Go**
 ```go
 v, err := method()
-if err != nil { return zero, err }
+if err != nil {
+    return zero, err
+}
 ```
 
 **TypeScript**
 ```ts
-return method() // thrown exception propagates
+return method()
 ```
+
+> Thrown exceptions propagate. Result unions do not.
 
 **Rust**
 ```rust
@@ -1567,16 +2067,20 @@ let v = method()?;
 **Odin**
 ```odin
 v, err := method()
-if err != nil { return {}, err }
+if err != nil {
+    return {}, err
+}
 ```
 
 **Gleam**
 ```gleam
 use v <- result.try(method())
-// or case method() { ... }
 ```
 
-### Cleanup / defer
+> Or case method() { Ok(v) -> ... Error(e) -> Error(e) }.
+
+
+### Cleanup / defer — *partial match*
 
 **Java**
 ```java
@@ -1587,7 +2091,9 @@ try (var in = open()) {
 
 **Kotlin**
 ```kotlin
-open().use { resource -> ... }
+open().use { resource ->
+  ...
+}
 ```
 
 **Python**
@@ -1604,14 +2110,22 @@ defer r.Close()
 
 **TypeScript**
 ```ts
-// often try/finally; explicit resource management depends on runtime
+const r = open()
+try {
+  ...
+} finally {
+  r.close()
+}
 ```
+
+> No language-level defer. try/finally, or runtime helpers (using, Disposable).
 
 **Rust**
 ```rust
 let r = open()?;
-// Drop runs at end of scope
 ```
+
+> Drop runs at end of scope. No finally needed for owned resources.
 
 **Odin**
 ```odin
@@ -1621,21 +2135,27 @@ defer close(r)
 
 **Gleam**
 ```gleam
-// immutable/managed runtime; resource APIs are library/runtime-specific
+use _ <- result.try(open())
 ```
 
-### Assertion
+> Managed runtime. Resource APIs are library-specific; there is no defer.
+
+
+### Assertion — *partial match*
 
 **Java**
 ```java
 assert x > 0;
 ```
 
+> JVM assertions are off unless -ea.
+
 **Kotlin**
 ```kotlin
 check(x > 0)
-// assert(...) may be JVM-assertion dependent
 ```
+
+> check throws. assert may depend on JVM -ea.
 
 **Python**
 ```python
@@ -1644,12 +2164,18 @@ assert x > 0
 
 **Go**
 ```go
-// no built-in assert; explicit if/panic or test helper
+if x <= 0 {
+    panic("assert")
+}
 ```
+
+> No built-in assert. Use an explicit if / panic, or a test helper.
 
 **TypeScript**
 ```ts
-if (!(x > 0)) throw new Error("assertion failed")
+if (!(x > 0)) {
+  throw new Error("assertion failed")
+}
 ```
 
 **Rust**
@@ -1667,18 +2193,23 @@ assert(x > 0)
 let assert True = x > 0
 ```
 
+
 ## I/O & process
 
-### CLI arguments
+### CLI arguments — *partial match*
 
 **Java**
 ```java
-var args = ... // main(String[] args)
+public static void main(String[] args) {
+  ...
+}
 ```
 
 **Kotlin**
 ```kotlin
-fun main(args: Array<String>) { ... }
+fun main(args: Array<String>) {
+  ...
+}
 ```
 
 **Python**
@@ -1693,8 +2224,10 @@ args := os.Args[1:]
 
 **TypeScript**
 ```ts
-const args = process.argv.slice(2) // Node
+const args = process.argv.slice(2)
 ```
+
+> Node. Deno uses Deno.args.
 
 **Rust**
 ```rust
@@ -1708,10 +2241,13 @@ args := os.args
 
 **Gleam**
 ```gleam
-// target/runtime-specific; on Erlang use gleam_erlang/os or starter helpers
+let args = argv.load().arguments
 ```
 
-### Environment variable
+> argv package, or gleam_erlang/os. Not in gleam_stdlib.
+
+
+### Environment variable — *partial match*
 
 **Java**
 ```java
@@ -1735,13 +2271,17 @@ v, ok := os.LookupEnv("PORT")
 
 **TypeScript**
 ```ts
-const v = process.env.PORT // Node
+const v = process.env.PORT
 ```
+
+> Node. Deno uses Deno.env.get.
 
 **Rust**
 ```rust
 let v = std::env::var("PORT");
 ```
+
+> Result. Err if unset.
 
 **Odin**
 ```odin
@@ -1751,10 +2291,13 @@ defer delete(v)
 
 **Gleam**
 ```gleam
-// target/runtime-specific; Erlang helpers live outside gleam_stdlib
+let result = envoy.get("PORT")
 ```
 
-### Read whole text file
+> envoy or gleam_erlang. Target-specific; not in gleam_stdlib.
+
+
+### Read whole text file — *partial match*
 
 **Java**
 ```java
@@ -1779,8 +2322,10 @@ s := string(b)
 
 **TypeScript**
 ```ts
-const s = await readFile(path, "utf8") // node:fs/promises
+const s = await readFile(path, "utf8")
 ```
+
+> node:fs/promises. Browser has no filesystem.
 
 **Rust**
 ```rust
@@ -1795,8 +2340,163 @@ defer delete(data)
 
 **Gleam**
 ```gleam
-// Erlang target: gleam_erlang/file; JS target: runtime FFI/package
+let result = simplifile.read(path)
 ```
+
+> simplifile is the usual package. Erlang vs JS backends differ.
+
+
+### Stdin / stdout
+
+**Java**
+```java
+var line = new BufferedReader(
+    new InputStreamReader(System.in)).readLine();
+System.out.print(s);
+```
+
+**Kotlin**
+```kotlin
+val line = readln()
+print(s)
+```
+
+**Python**
+```python
+line = sys.stdin.readline()
+sys.stdout.write(s)
+```
+
+**Go**
+```go
+line, err := bufio.NewReader(os.Stdin).ReadString('\n')
+fmt.Print(s)
+```
+
+**TypeScript**
+```ts
+const line = await once(process.stdin, "data")
+process.stdout.write(s)
+```
+
+> Node streams. once() is node:events.
+
+**Rust**
+```rust
+io::stdin().read_line(&mut line)?;
+print!("{s}");
+```
+
+**Odin**
+```odin
+fmt.print(s)
+// read from os.stdin with a buffered helper
+```
+
+**Gleam**
+```gleam
+io.println(s)
+```
+
+> gleam/io covers stdout. Stdin is target/package-specific.
+
+
+### Read binary file — *partial match*
+
+**Java**
+```java
+byte[] b = Files.readAllBytes(path);
+```
+
+**Kotlin**
+```kotlin
+val b = File(path).readBytes()
+```
+
+**Python**
+```python
+b = Path(path).read_bytes()
+```
+
+**Go**
+```go
+b, err := os.ReadFile(path)
+```
+
+**TypeScript**
+```ts
+const b = await readFile(path)
+```
+
+> node:fs/promises returns Buffer.
+
+**Rust**
+```rust
+let b = std::fs::read(path)?;
+```
+
+**Odin**
+```odin
+data, err := os.read_entire_file(path, context.allocator)
+defer delete(data)
+```
+
+**Gleam**
+```gleam
+let result = simplifile.read_bits(path)
+```
+
+> simplifile.read_bits. Confirm the name for your package version.
+
+
+### Write file — *partial match*
+
+**Java**
+```java
+Files.write(path, bytes);
+```
+
+**Kotlin**
+```kotlin
+File(path).writeBytes(bytes)
+```
+
+**Python**
+```python
+Path(path).write_bytes(data)
+```
+
+**Go**
+```go
+err := os.WriteFile(path, data, 0644)
+```
+
+**TypeScript**
+```ts
+await writeFile(path, data)
+```
+
+> node:fs/promises.
+
+**Rust**
+```rust
+std::fs::write(path, data)?;
+```
+
+**Odin**
+```odin
+ok := os.write_entire_file(path, data)
+```
+
+> Confirm the exact write helper for your compiler version.
+
+**Gleam**
+```gleam
+let result = simplifile.write_bits(path, data)
+```
+
+> simplifile. Erlang vs JS backends differ.
+
 
 ## Testing
 
@@ -1827,7 +2527,9 @@ def test_parses():
 **Go**
 ```go
 func TestParse(t *testing.T) {
-    if got := parse("1"); got != 1 { t.Fatal(got) }
+    if got := parse("1"); got != 1 {
+        t.Fatal(got)
+    }
 }
 ```
 
@@ -1835,8 +2537,10 @@ func TestParse(t *testing.T) {
 ```ts
 test("parses", () => {
   expect(parse("1")).toBe(1)
-}) // runner-dependent
+})
 ```
+
+> Runner-dependent (node:test, vitest, jest).
 
 **Rust**
 ```rust
@@ -1856,12 +2560,13 @@ test_parses :: proc(t: ^testing.T) {
 
 **Gleam**
 ```gleam
-// in test/..._test.gleam
 pub fn parses_test() {
   assert parse("1") == 1
 }
-// generated projects use gleeunit.main() as test main
 ```
+
+> File lives under test/ and ends in _test.gleam. Generated projects call gleeunit.main().
+
 
 ### Run tests
 
@@ -1877,9 +2582,11 @@ pub fn parses_test() {
 
 **Python**
 ```python
-pytest  # common
-python -m unittest  # stdlib
+pytest
+python -m unittest
 ```
+
+> pytest is common; unittest is stdlib.
 
 **Go**
 ```go
@@ -1888,8 +2595,10 @@ go test ./...
 
 **TypeScript**
 ```ts
-npm test  # project/runner-dependent
+npm test
 ```
+
+> Script and runner are project-dependent.
 
 **Rust**
 ```rust
@@ -1906,9 +2615,10 @@ odin test .
 gleam test
 ```
 
+
 ## Networking
 
-### TCP listen
+### TCP listen — *partial match*
 
 **Java**
 ```java
@@ -1935,8 +2645,10 @@ ln, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 **TypeScript**
 ```ts
 const server = net.createServer(handler)
-server.listen(port) // Node
+server.listen(port)
 ```
+
+> Node net. createServer already takes the connection handler.
 
 **Rust**
 ```rust
@@ -1950,11 +2662,14 @@ server, err := net.listen_tcp({net.IP4_Any, port})
 
 **Gleam**
 ```gleam
-// no TCP API in gleam_stdlib. On BEAM, use a package such as glisten
-// (or CodeCrafters starter/runtime FFI).
+glisten.new(init, loop)
+|> glisten.start(port)
 ```
 
-### TCP accept / connection loop
+> No TCP in gleam_stdlib. On BEAM, glisten (or the CodeCrafters starter). Confirm the builder API for your version.
+
+
+### TCP accept / connection loop — *wrong Java model*
 
 **Java**
 ```java
@@ -1968,6 +2683,7 @@ while (true) {
 ```kotlin
 while (true) {
   val socket = server.accept()
+  ...
 }
 ```
 
@@ -1975,6 +2691,7 @@ while (true) {
 ```python
 while True:
     conn, addr = s.accept()
+    ...
 ```
 
 **Go**
@@ -1989,8 +2706,10 @@ for {
 ```ts
 net.createServer(socket => {
   ...
-}) // callback/event-driven Node
+})
 ```
+
+> Node registers a callback. There is no blocking accept loop.
 
 **Rust**
 ```rust
@@ -2010,15 +2729,22 @@ for {
 
 **Gleam**
 ```gleam
-// package/runtime-specific; glisten manages acceptors and handlers
+fn loop(state, msg, conn) {
+  // glisten calls this per connection event
+}
 ```
 
-### Read bytes from TCP connection
+> glisten owns acceptors. You write a handler, not an accept loop.
+
+
+### Read bytes from TCP connection — *partial match*
 
 **Java**
 ```java
 int n = in.read(buffer);
 ```
+
+> n == -1 is EOF. n may be smaller than buffer.length.
 
 **Kotlin**
 ```kotlin
@@ -2037,8 +2763,12 @@ n, err := conn.Read(buf)
 
 **TypeScript**
 ```ts
-socket.on("data", (chunk: Buffer) => { ... }) // Node
+socket.on("data", (chunk: Buffer) => {
+  ...
+})
 ```
+
+> Push, not pull. You accumulate chunks; you do not call read().
 
 **Rust**
 ```rust
@@ -2052,10 +2782,15 @@ n, err := net.recv_tcp(client, buf)
 
 **Gleam**
 ```gleam
-// package/runtime-specific; typically BitArray messages/data
+Packet(data) -> {
+  // BitArray from the connection
+}
 ```
 
-### Write bytes to TCP connection
+> Package-specific messages, typically BitArray.
+
+
+### Write bytes to TCP connection — *partial match*
 
 **Java**
 ```java
@@ -2072,15 +2807,21 @@ output.write(bytes)
 conn.sendall(data)
 ```
 
+> sendall retries until all bytes are queued.
+
 **Go**
 ```go
 _, err := conn.Write(data)
 ```
 
+> Write can be short. See write-all.
+
 **TypeScript**
 ```ts
-socket.write(data) // Node
+socket.write(data)
 ```
+
+> Node. write() may buffer; listen for drain if you flood the socket.
 
 **Rust**
 ```rust
@@ -2094,28 +2835,311 @@ n, err := net.send_tcp(client, data)
 
 **Gleam**
 ```gleam
-// package/runtime-specific; e.g. glisten connection send APIs
+glisten.send(conn, data)
 ```
+
+> Name and arguments are package-version specific.
+
+
+### TCP client connect — *partial match*
+
+**Java**
+```java
+var socket = new Socket("127.0.0.1", port);
+```
+
+**Kotlin**
+```kotlin
+val socket = Socket("127.0.0.1", port)
+```
+
+**Python**
+```python
+conn = socket.create_connection(("127.0.0.1", port))
+```
+
+**Go**
+```go
+conn, err := net.Dial("tcp", addr)
+```
+
+**TypeScript**
+```ts
+const socket = net.createConnection({ host, port })
+```
+
+> Node net.
+
+**Rust**
+```rust
+let stream = TcpStream::connect(("127.0.0.1", port))?;
+```
+
+**Odin**
+```odin
+client, err := net.dial_tcp({net.IP4_Loopback, port})
+```
+
+> Confirm dial helper and address type for your compiler version.
+
+**Gleam**
+```gleam
+// gleam add mug
+mug.connect(host, port, timeout_ms)
+```
+
+> No stdlib client. mug is a common BEAM TCP client; confirm the API.
+
+
+### Close / shutdown connection
+
+**Java**
+```java
+socket.close();
+```
+
+**Kotlin**
+```kotlin
+socket.close()
+```
+
+**Python**
+```python
+conn.close()
+```
+
+**Go**
+```go
+conn.Close()
+```
+
+**TypeScript**
+```ts
+socket.end()
+```
+
+> end() half-closes after flushing. destroy() is abrupt.
+
+**Rust**
+```rust
+stream.shutdown(Shutdown::Both)?;
+```
+
+> Drop also closes. shutdown is explicit half/full close.
+
+**Odin**
+```odin
+net.close(client)
+```
+
+**Gleam**
+```gleam
+glisten.close(conn)
+```
+
+> Package-specific. Confirm the close helper.
+
+
+### Read until delimiter or N bytes — *partial match*
+
+**Java**
+```java
+var reader = new BufferedReader(
+    new InputStreamReader(in, StandardCharsets.UTF_8));
+String line = reader.readLine();
+```
+
+> readLine() strips the newline and returns null at EOF.
+
+**Kotlin**
+```kotlin
+val line = input.bufferedReader().readLine()
+```
+
+**Python**
+```python
+line = conn.makefile().readline()
+chunk = conn.recv(n)
+```
+
+**Go**
+```go
+r := bufio.NewReader(conn)
+line, err := r.ReadBytes('\n')
+chunk := make([]byte, n)
+_, err = io.ReadFull(r, chunk)
+```
+
+**TypeScript**
+```ts
+buf = Buffer.concat([buf, chunk])
+const i = buf.indexOf("\n")
+if (i >= 0) {
+  const line = buf.subarray(0, i)
+  buf = buf.subarray(i + 1)
+}
+```
+
+> You must reassemble frames. data events are not message boundaries.
+
+**Rust**
+```rust
+let mut r = BufReader::new(&stream);
+r.read_until(b'\n', &mut line)?;
+r.read_exact(&mut chunk)?;
+```
+
+**Odin**
+```odin
+// accumulate in a buffer; scan for \n
+n, err := net.recv_tcp(client, buf[filled:])
+```
+
+> No std bufio. Keep a filled count and compact the buffer after each frame.
+
+**Gleam**
+```gleam
+let combined = bit_array.append(buf, chunk)
+// split on <<"\n">> yourself
+```
+
+> If the package already delivers messages, still buffer if a frame can split.
+
+
+### Write-all / short writes — *partial match*
+
+**Java**
+```java
+out.write(bytes);
+out.flush();
+```
+
+> OutputStream.write(byte[]) writes the whole array or throws. Still flush sockets.
+
+**Kotlin**
+```kotlin
+output.write(bytes)
+output.flush()
+```
+
+**Python**
+```python
+conn.sendall(data)
+```
+
+**Go**
+```go
+_, err := io.Copy(conn, bytes.NewReader(data))
+```
+
+> conn.Write can return a short write without err == nil. Loop or use io.Copy.
+
+**TypeScript**
+```ts
+const ok = socket.write(data)
+if (!ok) socket.once("drain", resume)
+```
+
+> write() returning false means the kernel buffer is full, not that data was lost.
+
+**Rust**
+```rust
+stream.write_all(data)?;
+```
+
+**Odin**
+```odin
+for remaining := data; len(remaining) > 0; {
+    n, err := net.send_tcp(client, remaining)
+    remaining = remaining[n:]
+}
+```
+
+**Gleam**
+```gleam
+glisten.send(conn, data)
+```
+
+> Treat send as package-defined; do not assume POSIX short writes.
+
+
+### Timeout / deadline — *partial match*
+
+**Java**
+```java
+socket.setSoTimeout(1000);
+```
+
+> SoTimeout applies to blocking reads; it throws SocketTimeoutException.
+
+**Kotlin**
+```kotlin
+socket.soTimeout = 1000
+```
+
+**Python**
+```python
+conn.settimeout(1.0)
+```
+
+**Go**
+```go
+conn.SetDeadline(time.Now().Add(time.Second))
+```
+
+> Deadline is absolute. Reset it on each request if you want a per-read timeout.
+
+**TypeScript**
+```ts
+socket.setTimeout(1000)
+```
+
+> Fires a timeout event; it does not throw from write().
+
+**Rust**
+```rust
+stream.set_read_timeout(Some(Duration::from_secs(1)))?;
+```
+
+**Odin**
+```odin
+net.set_option(client, net.Receive_Timeout, 1 * time.Second)
+```
+
+> Option names are version-sensitive. Compiler-check this.
+
+**Gleam**
+```gleam
+process.send_after(self(), 1000, Timeout)
+```
+
+> BEAM process timers, not socket options. Package APIs may wrap this.
+
 
 ## Concurrency
 
-### Spawn concurrent work
+### Spawn concurrent work — *wrong Java model*
 
 **Java**
 ```java
 Thread.startVirtualThread(() -> work());
 ```
 
+> Virtual threads are Java 21+. Older: new Thread(work).start().
+
 **Kotlin**
 ```kotlin
-launch { work() } // coroutine scope
+launch { work() }
 ```
+
+> Needs a coroutine scope. launch is not a language keyword you can call anywhere.
 
 **Python**
 ```python
 threading.Thread(target=work).start()
-# or asyncio.create_task(...)
 ```
+
+> Or asyncio.create_task(...) for cooperative async.
 
 **Go**
 ```go
@@ -2124,8 +3148,10 @@ go work()
 
 **TypeScript**
 ```ts
-// event loop for async I/O; Worker for CPU parallelism
+await work()
 ```
+
+> The event loop already interleaves I/O. Use Worker for CPU parallelism.
 
 **Rust**
 ```rust
@@ -2135,15 +3161,19 @@ std::thread::spawn(|| work());
 **Odin**
 ```odin
 thread.create_and_start(proc() { work() })
-// exact API may vary; see core:thread
 ```
+
+> See core:thread; exact helpers vary by version.
 
 **Gleam**
 ```gleam
-process.spawn(fn() { work() }) // gleam_erlang on BEAM
+process.spawn(fn() { work() })
 ```
 
-### Channel / message passing
+> gleam_erlang on BEAM. JS target has no process.spawn.
+
+
+### Channel / message passing — *wrong Java model*
 
 **Java**
 ```java
@@ -2167,8 +3197,10 @@ ch := make(chan T)
 
 **TypeScript**
 ```ts
-// no built-in typed CSP channel; use async queues/libs
+const q: T[] = []
 ```
+
+> No built-in CSP channel. Use an async queue or a library.
 
 **Rust**
 ```rust
@@ -2179,10 +3211,14 @@ let (tx, rx) = std::sync::mpsc::channel();
 ```odin
 c, _ := chan.create(chan.Chan(MyType), context.allocator)
 defer chan.destroy(c)
-// core:sync/chan
 ```
+
+> core:sync/chan. Confirm create/destroy for your version.
 
 **Gleam**
 ```gleam
-// BEAM processes + typed selectors/messages via gleam_erlang/OTP libraries
+process.send(pid, msg)
+let selector = process.new_selector()
 ```
+
+> BEAM processes plus typed selectors via gleam_erlang / OTP libraries.

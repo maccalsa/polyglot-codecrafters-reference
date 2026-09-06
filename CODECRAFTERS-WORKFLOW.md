@@ -19,8 +19,10 @@ Do **not** design a Java architecture in the new language yet.
 For network challenges, prove this sequence first:
 
 ```text
-listen -> accept -> read bytes -> parse minimum -> write bytes -> close
+listen -> accept -> read until frame -> parse minimum -> write-all -> close
 ```
+
+Look up those steps in the reference (`tcp-listen`, `buffered-read`, `write-all`, `timeout`, `tcp-close`) before inventing a Java-shaped I/O loop.
 
 Then layer protocol features on top.
 

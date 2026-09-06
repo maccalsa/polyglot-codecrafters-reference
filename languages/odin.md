@@ -20,6 +20,8 @@ odin check .
 - `union` plus `switch x in value` is the natural tagged-union/pattern style.
 - Read `core` source when docs are thin: Odin deliberately keeps the language/runtime relatively transparent.
 - Odin is evolving; this reference is pinned conceptually to the September 2026 docs and should be compiler-checked when an API looks unfamiliar.
+- Slices are views. Copy if a parser result must outlive the recv buffer.
+- Socket timeouts and dial helpers are version-sensitive; compiler-check `core:net` before trusting a snippet.
 
 ## Construct lookup
 

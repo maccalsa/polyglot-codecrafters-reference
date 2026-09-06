@@ -17,6 +17,8 @@ python app.py
 - Strings are Unicode text, not byte buffers. Protocol work usually means being explicit about encode/decode boundaries.
 - Exceptions are the normal error mechanism.
 - `asyncio`, OS threads, and processes solve different concurrency problems; don't treat `async` as parallel CPU execution.
+- `recv` can return fewer bytes than you asked for. Use `makefile().readline()` or accumulate until you have a frame.
+- `sendall` is the right default; `send` is the short-write primitive.
 
 ## Construct lookup
 

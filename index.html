@@ -1,24 +1,1716 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Java → Polyglot Reference</title><style>
-:root { color-scheme: light dark; --bg:#0e1116; --panel:#151a22; --panel2:#1b222c; --text:#e7edf4; --muted:#97a3b2; --line:#2a3442; --accent:#8ab4f8; --code:#0a0d12; }
-*{box-sizing:border-box} body{margin:0;font:15px/1.45 ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--text)}
-header{position:sticky;top:0;z-index:5;background:rgba(14,17,22,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:18px 22px 14px}
-h1{font-size:20px;margin:0 0 4px}.sub{color:var(--muted);margin-bottom:14px}.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-input{min-width:280px;flex:1;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:8px;font:inherit}
-button,.chip{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:8px 10px;border-radius:999px;cursor:pointer}.chip.off{opacity:.4;text-decoration:line-through}.chip.base{border-color:var(--accent)}
-main{padding:18px 22px 60px;max-width:1800px;margin:auto}.category{margin:28px 0 10px;font-size:18px}.card{border:1px solid var(--line);background:var(--panel);border-radius:12px;margin:10px 0 16px;overflow:hidden}.title{font-size:16px;font-weight:700;padding:12px 14px;border-bottom:1px solid var(--line)}
-.grid{display:grid;grid-template-columns:repeat(var(--cols), minmax(220px,1fr));overflow:auto}.cell{min-width:220px;border-right:1px solid var(--line);padding:0}.cell:last-child{border-right:0}.lang{padding:8px 10px;font-weight:700;color:var(--accent);background:var(--panel2);border-bottom:1px solid var(--line);position:sticky;top:127px}.cell.java .lang{color:#f4d06f}pre{margin:0;padding:11px 12px;background:var(--code);white-space:pre-wrap;word-break:break-word;min-height:74px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-.empty{color:var(--muted);padding:40px;text-align:center}.count{color:var(--muted);font-size:13px;margin-left:auto}a{color:var(--accent)}
-@media(max-width:700px){header{position:static}.lang{position:static}main{padding:12px}header{padding:14px}input{min-width:100%}}
-</style></head><body>
-<header><h1>Java → Polyglot CodeCrafters Reference</h1><div class="sub">You know the concept. Find how it looks — and where a literal Java translation is the wrong model.</div><div class="controls"><input id="q" placeholder="Search: tcp, map lookup, optional, bytes, test…" autofocus><div id="chips"></div><span class="count" id="count"></span></div></header>
-<main id="app"></main>
-<script>
-const DATA=[{"category": "Fundamentals", "concept": "Immutable binding", "snippets": {"Java": "final var x = 42;", "Kotlin": "val x = 42", "Python": "x = 42  # no language-level const", "Go": "x := 42  // binding itself is mutable", "TypeScript": "const x = 42", "Rust": "let x = 42;", "Odin": "x := 42  // variable; use :: for constants", "Gleam": "let x = 42"}}, {"category": "Fundamentals", "concept": "Constant", "snippets": {"Java": "static final int PORT = 6379;", "Kotlin": "const val PORT = 6379", "Python": "PORT = 6379  # convention: uppercase", "Go": "const Port = 6379", "TypeScript": "const PORT = 6379", "Rust": "const PORT: u16 = 6379;", "Odin": "PORT :: 6379", "Gleam": "const port = 6379"}}, {"category": "Fundamentals", "concept": "Mutable variable", "snippets": {"Java": "var x = 1;\nx = 2;", "Kotlin": "var x = 1\nx = 2", "Python": "x = 1\nx = 2", "Go": "x := 1\nx = 2", "TypeScript": "let x = 1\nx = 2", "Rust": "let mut x = 1;\nx = 2;", "Odin": "x := 1\nx = 2", "Gleam": "// bindings are immutable\nlet x = 1\nlet x = 2  // shadowing"}}, {"category": "Fundamentals", "concept": "Function", "snippets": {"Java": "int add(int a, int b) {\n  return a + b;\n}", "Kotlin": "fun add(a: Int, b: Int): Int = a + b", "Python": "def add(a: int, b: int) -> int:\n    return a + b", "Go": "func add(a, b int) int {\n    return a + b\n}", "TypeScript": "function add(a: number, b: number): number {\n  return a + b\n}", "Rust": "fn add(a: i32, b: i32) -> i32 {\n    a + b\n}", "Odin": "add :: proc(a, b: int) -> int {\n    return a + b\n}", "Gleam": "fn add(a: Int, b: Int) -> Int {\n  a + b\n}"}}, {"category": "Fundamentals", "concept": "Anonymous function / lambda", "snippets": {"Java": "x -> x * 2", "Kotlin": "{ x -> x * 2 }", "Python": "lambda x: x * 2", "Go": "func(x int) int { return x * 2 }", "TypeScript": "(x: number) => x * 2", "Rust": "|x| x * 2", "Odin": "proc(x: int) -> int { return x * 2 }", "Gleam": "fn(x) { x * 2 }"}}, {"category": "Fundamentals", "concept": "Generic function", "snippets": {"Java": "static <T> T id(T x) { return x; }", "Kotlin": "fun <T> id(x: T): T = x", "Python": "def id[T](x: T) -> T:\n    return x  # Python 3.12+", "Go": "func id[T any](x T) T { return x }", "TypeScript": "function id<T>(x: T): T { return x }", "Rust": "fn id<T>(x: T) -> T { x }", "Odin": "id :: proc(x: $T) -> T { return x }", "Gleam": "fn id(x: a) -> a { x }"}}, {"category": "Fundamentals", "concept": "Tuple / pair", "snippets": {"Java": "record Pair<A,B>(A first, B second) {}", "Kotlin": "val p = 1 to \"a\"\n// Pair<Int, String>", "Python": "p = (1, \"a\")", "Go": "// multiple return values are idiomatic\nreturn 1, \"a\"", "TypeScript": "const p: [number, string] = [1, \"a\"]", "Rust": "let p: (i32, &str) = (1, \"a\");", "Odin": "// no general first-class tuple type\n// use a small struct, or multiple return values:\na, b := get_pair()", "Gleam": "let p = #(1, \"a\")"}}, {"category": "Types", "concept": "Data carrier / record", "snippets": {"Java": "record User(String name, int age) {}", "Kotlin": "data class User(val name: String, val age: Int)", "Python": "@dataclass\nclass User:\n    name: str\n    age: int", "Go": "type User struct {\n    Name string\n    Age  int\n}", "TypeScript": "type User = { name: string; age: number }", "Rust": "struct User {\n    name: String,\n    age: u32,\n}", "Odin": "User :: struct {\n    name: string,\n    age: int,\n}", "Gleam": "pub type User {\n  User(name: String, age: Int)\n}"}}, {"category": "Types", "concept": "Interface / trait / protocol", "snippets": {"Java": "interface Reader {\n  byte[] read();\n}", "Kotlin": "interface Reader {\n  fun read(): ByteArray\n}", "Python": "class Reader(Protocol):\n    def read(self) -> bytes: ...", "Go": "type Reader interface {\n    Read([]byte) (int, error)\n}", "TypeScript": "interface Reader {\n  read(): Uint8Array\n}", "Rust": "trait Reader {\n    fn read(&mut self) -> Vec<u8>;\n}", "Odin": "// no interface construct; use procedures,\n// tagged unions, or procedure fields", "Gleam": "// no interfaces/typeclasses; model behaviour\n// with functions and custom types"}}, {"category": "Types", "concept": "Enum / sum type", "snippets": {"Java": "sealed interface Msg permits Ping, Quit {}\nrecord Ping(int id) implements Msg {}\nrecord Quit() implements Msg {}", "Kotlin": "sealed interface Msg\ndata class Ping(val id: Int): Msg\ndata object Quit: Msg", "Python": "type Msg = Ping | Quit  # 3.12 type alias", "Go": "// usually tagged struct/interface; no native sum type", "TypeScript": "type Msg =\n  | { kind: \"ping\"; id: number }\n  | { kind: \"quit\" }", "Rust": "enum Msg {\n    Ping { id: i32 },\n    Quit,\n}", "Odin": "Msg :: union { Ping, Quit }", "Gleam": "pub type Msg {\n  Ping(id: Int)\n  Quit\n}"}}, {"category": "Types", "concept": "Optional / nullable", "snippets": {"Java": "Optional<String> name", "Kotlin": "val name: String?", "Python": "name: str | None", "Go": "// often pointer or (value, ok)\nvar name *string", "TypeScript": "let name: string | undefined", "Rust": "let name: Option<String>", "Odin": "name: Maybe(string)\n// core APIs also commonly use (value, ok)", "Gleam": "let name: Option(String)"}}, {"category": "Types", "concept": "Default when missing", "snippets": {"Java": "var n = opt.orElse(\"default\");", "Kotlin": "val n = value ?: \"default\"", "Python": "n = value if value is not None else \"default\"", "Go": "if value == \"\" { value = \"default\" }", "TypeScript": "const n = value ?? \"default\"", "Rust": "let n = value.unwrap_or(\"default\");", "Odin": "n := value.? or_else \"default\"  // for Maybe(string)", "Gleam": "let n = option.unwrap(value, \"default\")"}}, {"category": "Control flow", "concept": "If / else", "snippets": {"Java": "if (x > 0) {\n  ...\n} else {\n  ...\n}", "Kotlin": "if (x > 0) {\n  ...\n} else {\n  ...\n}", "Python": "if x > 0:\n    ...\nelse:\n    ...", "Go": "if x > 0 {\n    ...\n} else {\n    ...\n}", "TypeScript": "if (x > 0) {\n  ...\n} else {\n  ...\n}", "Rust": "if x > 0 {\n    ...\n} else {\n    ...\n}", "Odin": "if x > 0 {\n    ...\n} else {\n    ...\n}", "Gleam": "case x > 0 {\n  True -> ...\n  False -> ...\n}"}}, {"category": "Control flow", "concept": "Pattern match / switch", "snippets": {"Java": "switch (msg) {\n  case Ping p -> handle(p);\n  case Quit q -> stop();\n}", "Kotlin": "when (msg) {\n  is Ping -> handle(msg)\n  Quit -> stop()\n}", "Python": "match msg:\n    case Ping(id): ...\n    case Quit(): ...", "Go": "switch v := msg.(type) {\ncase Ping:\n    _ = v\n}", "TypeScript": "switch (msg.kind) {\n  case \"ping\": ...\n}", "Rust": "match msg {\n    Msg::Ping { id } => ...,\n    Msg::Quit => ...,\n}", "Odin": "switch v in msg {\ncase Ping:\n    ...\ncase Quit:\n    ...\n}", "Gleam": "case msg {\n  Ping(id) -> ...\n  Quit -> ...\n}"}}, {"category": "Control flow", "concept": "For each", "snippets": {"Java": "for (var x : xs) { ... }", "Kotlin": "for (x in xs) { ... }", "Python": "for x in xs:\n    ...", "Go": "for _, x := range xs {\n    ...\n}", "TypeScript": "for (const x of xs) {\n  ...\n}", "Rust": "for x in xs {\n    ...\n}", "Odin": "for x in xs {\n    ...\n}", "Gleam": "list.each(xs, fn(x) { ... })"}}, {"category": "Control flow", "concept": "Index + value iteration", "snippets": {"Java": "for (int i = 0; i < xs.size(); i++) {\n  var x = xs.get(i);\n}", "Kotlin": "for ((i, x) in xs.withIndex()) { ... }", "Python": "for i, x in enumerate(xs):\n    ...", "Go": "for i, x := range xs {\n    ...\n}", "TypeScript": "for (const [i, x] of xs.entries()) { ... }", "Rust": "for (i, x) in xs.iter().enumerate() { ... }", "Odin": "for x, i in xs {\n    ...\n}", "Gleam": "list.index_map(xs, fn(x, i) { ... })"}}, {"category": "Control flow", "concept": "While loop", "snippets": {"Java": "while (condition) { ... }", "Kotlin": "while (condition) { ... }", "Python": "while condition:\n    ...", "Go": "for condition {\n    ...\n}", "TypeScript": "while (condition) { ... }", "Rust": "while condition { ... }", "Odin": "for condition {\n    ...\n}", "Gleam": "// no while loop; use recursion or iterator/list functions"}}, {"category": "Control flow", "concept": "Early return", "snippets": {"Java": "if (bad) return result;", "Kotlin": "if (bad) return result", "Python": "if bad:\n    return result", "Go": "if bad {\n    return result\n}", "TypeScript": "if (bad) return result", "Rust": "if bad { return result; }", "Odin": "if bad { return result }", "Gleam": "// structure with case/result pipelines; no imperative early-return idiom"}}, {"category": "Collections", "concept": "List / dynamic sequence", "snippets": {"Java": "var xs = new ArrayList<Integer>();", "Kotlin": "val xs = mutableListOf<Int>()", "Python": "xs: list[int] = []", "Go": "xs := []int{}", "TypeScript": "const xs: number[] = []", "Rust": "let mut xs: Vec<i32> = Vec::new();", "Odin": "xs := make([dynamic]int)\ndefer delete(xs)", "Gleam": "let xs: List(Int) = []"}}, {"category": "Collections", "concept": "Fixed / contiguous array", "snippets": {"Java": "int[] xs = new int[16];", "Kotlin": "val xs = IntArray(16)", "Python": "# list is usual general sequence\nxs = [0] * 16", "Go": "var xs [16]int", "TypeScript": "const xs = new Int32Array(16)", "Rust": "let xs = [0i32; 16];", "Odin": "xs: [16]int", "Gleam": "// List is linked; BitArray for bytes.\n// No general mutable array in core language."}}, {"category": "Collections", "concept": "Map / dictionary creation", "snippets": {"Java": "var m = new HashMap<String, Integer>();", "Kotlin": "val m = mutableMapOf<String, Int>()", "Python": "m: dict[str, int] = {}", "Go": "m := make(map[string]int)", "TypeScript": "const m = new Map<string, number>()", "Rust": "let mut m = HashMap::<String, i32>::new();", "Odin": "m := make(map[string]int)\ndefer delete(m)", "Gleam": "let m = dict.new()"}}, {"category": "Collections", "concept": "Map lookup with presence", "snippets": {"Java": "var v = m.get(key);\nif (v != null) { ... }", "Kotlin": "val v = m[key]\nif (v != null) { ... }", "Python": "if key in m:\n    v = m[key]", "Go": "v, ok := m[key]\nif ok { ... }", "TypeScript": "const v = m.get(key)\nif (v !== undefined) { ... }", "Rust": "if let Some(v) = m.get(&key) { ... }", "Odin": "v, ok := m[key]\nif ok { ... }", "Gleam": "case dict.get(m, key) {\n  Ok(v) -> ...\n  Error(Nil) -> ...\n}"}}, {"category": "Collections", "concept": "Set creation", "snippets": {"Java": "var s = new HashSet<String>();", "Kotlin": "val s = mutableSetOf<String>()", "Python": "s: set[str] = set()", "Go": "s := map[string]struct{}{}", "TypeScript": "const s = new Set<string>()", "Rust": "let mut s = HashSet::<String>::new();", "Odin": "// idiom: map[T]struct{} or bit_set for enum-like keys", "Gleam": "let s = set.new()"}}, {"category": "Collections", "concept": "Filter", "snippets": {"Java": "var ys = xs.stream().filter(x -> x > 0).toList();", "Kotlin": "val ys = xs.filter { it > 0 }", "Python": "ys = [x for x in xs if x > 0]", "Go": "ys := make([]int, 0, len(xs))\nfor _, x := range xs { if x > 0 { ys = append(ys, x) } }", "TypeScript": "const ys = xs.filter(x => x > 0)", "Rust": "let ys: Vec<_> = xs.into_iter().filter(|x| *x > 0).collect();", "Odin": "ys := make([dynamic]int)\nfor x in xs { if x > 0 { append(&ys, x) } }", "Gleam": "let ys = list.filter(xs, fn(x) { x > 0 })"}}, {"category": "Collections", "concept": "Map / transform", "snippets": {"Java": "var ys = xs.stream().map(x -> x * 2).toList();", "Kotlin": "val ys = xs.map { it * 2 }", "Python": "ys = [x * 2 for x in xs]", "Go": "ys := make([]int, len(xs))\nfor i, x := range xs { ys[i] = x * 2 }", "TypeScript": "const ys = xs.map(x => x * 2)", "Rust": "let ys: Vec<_> = xs.into_iter().map(|x| x * 2).collect();", "Odin": "ys := make([dynamic]int)\nfor x in xs { append(&ys, x*2) }", "Gleam": "let ys = list.map(xs, fn(x) { x * 2 })"}}, {"category": "Collections", "concept": "Fold / reduce", "snippets": {"Java": "var total = xs.stream().reduce(0, Integer::sum);", "Kotlin": "val total = xs.fold(0) { acc, x -> acc + x }", "Python": "total = sum(xs)", "Go": "total := 0\nfor _, x := range xs { total += x }", "TypeScript": "const total = xs.reduce((a, x) => a + x, 0)", "Rust": "let total: i32 = xs.iter().sum();", "Odin": "total := 0\nfor x in xs { total += x }", "Gleam": "let total = list.fold(xs, 0, fn(acc, x) { acc + x })"}}, {"category": "Strings & bytes", "concept": "String interpolation", "snippets": {"Java": "var s = \"port=\" + port;", "Kotlin": "val s = \"port=$port\"", "Python": "s = f\"port={port}\"", "Go": "s := fmt.Sprintf(\"port=%d\", port)", "TypeScript": "const s = `port=${port}`", "Rust": "let s = format!(\"port={port}\");", "Odin": "s := fmt.tprintf(\"port=%d\", port)", "Gleam": "let s = \"port=\" <> int.to_string(port)"}}, {"category": "Strings & bytes", "concept": "UTF-8 string → bytes", "snippets": {"Java": "byte[] b = s.getBytes(StandardCharsets.UTF_8);", "Kotlin": "val b = s.encodeToByteArray()", "Python": "b = s.encode(\"utf-8\")", "Go": "b := []byte(s)", "TypeScript": "const b = new TextEncoder().encode(s)", "Rust": "let b = s.as_bytes();", "Odin": "b := transmute([]u8)s  // view; do not mutate\n// clone if ownership/mutation is needed", "Gleam": "let b = bit_array.from_string(s)"}}, {"category": "Strings & bytes", "concept": "Bytes → UTF-8 string", "snippets": {"Java": "var s = new String(b, StandardCharsets.UTF_8);", "Kotlin": "val s = b.decodeToString()", "Python": "s = b.decode(\"utf-8\")", "Go": "s := string(b)", "TypeScript": "const s = new TextDecoder().decode(b)", "Rust": "let s = std::str::from_utf8(&b)?;", "Odin": "s := string(b)  // conversion semantics matter; clone if lifetime requires", "Gleam": "let result = bit_array.to_string(b)  // Result(String, Nil)"}}, {"category": "Strings & bytes", "concept": "Split string", "snippets": {"Java": "var parts = s.split(\":\", -1);", "Kotlin": "val parts = s.split(\":\")", "Python": "parts = s.split(\":\")", "Go": "parts := strings.Split(s, \":\")", "TypeScript": "const parts = s.split(\":\")", "Rust": "let parts: Vec<_> = s.split(':').collect();", "Odin": "parts := strings.split(s, \":\")", "Gleam": "let parts = string.split(s, \":\")"}}, {"category": "Strings & bytes", "concept": "Parse integer", "snippets": {"Java": "int n = Integer.parseInt(s);", "Kotlin": "val n = s.toInt()\n// or toIntOrNull()", "Python": "n = int(s)", "Go": "n, err := strconv.Atoi(s)", "TypeScript": "const n = Number.parseInt(s, 10)", "Rust": "let n: i32 = s.parse()?;", "Odin": "n, ok := strconv.parse_int(s)\n// inspect returned type/options for your Odin version", "Gleam": "let result = int.parse(s)  // Result(Int, Nil)"}}, {"category": "Errors & resources", "concept": "Represent recoverable error", "snippets": {"Java": "T method() throws IOException", "Kotlin": "fun method(): T  // exceptions unchecked", "Python": "def method() -> T:  # raises exception", "Go": "func method() (T, error)", "TypeScript": "function method(): T  // throw, or use an explicit Result union", "Rust": "fn method() -> Result<T, E>", "Odin": "method :: proc() -> (T, Error)\n// explicit multi-return is common", "Gleam": "fn method() -> Result(T, E)"}}, {"category": "Errors & resources", "concept": "Propagate error", "snippets": {"Java": "return method(); // or throws", "Kotlin": "return method()  // exception propagates", "Python": "return method()  # exception propagates", "Go": "v, err := method()\nif err != nil { return zero, err }", "TypeScript": "return method() // thrown exception propagates", "Rust": "let v = method()?;", "Odin": "v, err := method()\nif err != nil { return {}, err }", "Gleam": "use v <- result.try(method())\n// or case method() { ... }"}}, {"category": "Errors & resources", "concept": "Cleanup / defer", "snippets": {"Java": "try (var in = open()) {\n  ...\n}", "Kotlin": "open().use { resource -> ... }", "Python": "with open_resource() as resource:\n    ...", "Go": "r := open()\ndefer r.Close()", "TypeScript": "// often try/finally; explicit resource management depends on runtime", "Rust": "let r = open()?;\n// Drop runs at end of scope", "Odin": "r := open()\ndefer close(r)", "Gleam": "// immutable/managed runtime; resource APIs are library/runtime-specific"}}, {"category": "Errors & resources", "concept": "Assertion", "snippets": {"Java": "assert x > 0;", "Kotlin": "check(x > 0)\n// assert(...) may be JVM-assertion dependent", "Python": "assert x > 0", "Go": "// no built-in assert; explicit if/panic or test helper", "TypeScript": "if (!(x > 0)) throw new Error(\"assertion failed\")", "Rust": "assert!(x > 0);", "Odin": "assert(x > 0)", "Gleam": "let assert True = x > 0"}}, {"category": "I/O & process", "concept": "CLI arguments", "snippets": {"Java": "var args = ... // main(String[] args)", "Kotlin": "fun main(args: Array<String>) { ... }", "Python": "args = sys.argv[1:]", "Go": "args := os.Args[1:]", "TypeScript": "const args = process.argv.slice(2) // Node", "Rust": "let args: Vec<String> = std::env::args().skip(1).collect();", "Odin": "args := os.args", "Gleam": "// target/runtime-specific; on Erlang use gleam_erlang/os or starter helpers"}}, {"category": "I/O & process", "concept": "Environment variable", "snippets": {"Java": "var v = System.getenv(\"PORT\");", "Kotlin": "val v = System.getenv(\"PORT\")", "Python": "v = os.getenv(\"PORT\")", "Go": "v, ok := os.LookupEnv(\"PORT\")", "TypeScript": "const v = process.env.PORT // Node", "Rust": "let v = std::env::var(\"PORT\");", "Odin": "v, found := os.lookup_env(\"PORT\", context.allocator)\ndefer delete(v)", "Gleam": "// target/runtime-specific; Erlang helpers live outside gleam_stdlib"}}, {"category": "I/O & process", "concept": "Read whole text file", "snippets": {"Java": "var s = Files.readString(path);", "Kotlin": "val s = File(path).readText()", "Python": "s = Path(path).read_text()", "Go": "b, err := os.ReadFile(path)\ns := string(b)", "TypeScript": "const s = await readFile(path, \"utf8\") // node:fs/promises", "Rust": "let s = std::fs::read_to_string(path)?;", "Odin": "data, err := os.read_entire_file(path, context.allocator)\ndefer delete(data)", "Gleam": "// Erlang target: gleam_erlang/file; JS target: runtime FFI/package"}}, {"category": "Testing", "concept": "Test", "snippets": {"Java": "@Test\nvoid parses() {\n  assertEquals(1, parse(\"1\"));\n}", "Kotlin": "@Test\nfun parses() {\n  assertEquals(1, parse(\"1\"))\n}", "Python": "def test_parses():\n    assert parse(\"1\") == 1", "Go": "func TestParse(t *testing.T) {\n    if got := parse(\"1\"); got != 1 { t.Fatal(got) }\n}", "TypeScript": "test(\"parses\", () => {\n  expect(parse(\"1\")).toBe(1)\n}) // runner-dependent", "Rust": "#[test]\nfn parses() {\n    assert_eq!(1, parse(\"1\"));\n}", "Odin": "@(test)\ntest_parses :: proc(t: ^testing.T) {\n    testing.expect_value(t, parse(\"1\"), 1)\n}", "Gleam": "// in test/..._test.gleam\npub fn parses_test() {\n  assert parse(\"1\") == 1\n}\n// generated projects use gleeunit.main() as test main"}}, {"category": "Testing", "concept": "Run tests", "snippets": {"Java": "./gradlew test", "Kotlin": "./gradlew test", "Python": "pytest  # common\npython -m unittest  # stdlib", "Go": "go test ./...", "TypeScript": "npm test  # project/runner-dependent", "Rust": "cargo test", "Odin": "odin test .", "Gleam": "gleam test"}}, {"category": "Networking", "concept": "TCP listen", "snippets": {"Java": "var server = new ServerSocket(port);", "Kotlin": "val server = ServerSocket(port)", "Python": "s = socket.socket()\ns.bind((\"127.0.0.1\", port))\ns.listen()", "Go": "ln, err := net.Listen(\"tcp\", fmt.Sprintf(\":%d\", port))", "TypeScript": "const server = net.createServer(handler)\nserver.listen(port) // Node", "Rust": "let listener = TcpListener::bind((\"127.0.0.1\", port))?;", "Odin": "server, err := net.listen_tcp({net.IP4_Any, port})", "Gleam": "// no TCP API in gleam_stdlib. On BEAM, use a package such as glisten\n// (or CodeCrafters starter/runtime FFI)."}}, {"category": "Networking", "concept": "TCP accept / connection loop", "snippets": {"Java": "while (true) {\n  var socket = server.accept();\n  ...\n}", "Kotlin": "while (true) {\n  val socket = server.accept()\n}", "Python": "while True:\n    conn, addr = s.accept()", "Go": "for {\n    conn, err := ln.Accept()\n    ...\n}", "TypeScript": "net.createServer(socket => {\n  ...\n}) // callback/event-driven Node", "Rust": "for stream in listener.incoming() {\n    let stream = stream?;\n    ...\n}", "Odin": "for {\n    client, source, err := net.accept_tcp(server)\n    ...\n}", "Gleam": "// package/runtime-specific; glisten manages acceptors and handlers"}}, {"category": "Networking", "concept": "Read bytes from TCP connection", "snippets": {"Java": "int n = in.read(buffer);", "Kotlin": "val n = input.read(buffer)", "Python": "data = conn.recv(4096)", "Go": "n, err := conn.Read(buf)", "TypeScript": "socket.on(\"data\", (chunk: Buffer) => { ... }) // Node", "Rust": "let n = stream.read(&mut buf)?;", "Odin": "n, err := net.recv_tcp(client, buf)", "Gleam": "// package/runtime-specific; typically BitArray messages/data"}}, {"category": "Networking", "concept": "Write bytes to TCP connection", "snippets": {"Java": "out.write(bytes);", "Kotlin": "output.write(bytes)", "Python": "conn.sendall(data)", "Go": "_, err := conn.Write(data)", "TypeScript": "socket.write(data) // Node", "Rust": "stream.write_all(data)?;", "Odin": "n, err := net.send_tcp(client, data)", "Gleam": "// package/runtime-specific; e.g. glisten connection send APIs"}}, {"category": "Concurrency", "concept": "Spawn concurrent work", "snippets": {"Java": "Thread.startVirtualThread(() -> work());", "Kotlin": "launch { work() } // coroutine scope", "Python": "threading.Thread(target=work).start()\n# or asyncio.create_task(...)", "Go": "go work()", "TypeScript": "// event loop for async I/O; Worker for CPU parallelism", "Rust": "std::thread::spawn(|| work());", "Odin": "thread.create_and_start(proc() { work() })\n// exact API may vary; see core:thread", "Gleam": "process.spawn(fn() { work() }) // gleam_erlang on BEAM"}}, {"category": "Concurrency", "concept": "Channel / message passing", "snippets": {"Java": "var q = new LinkedBlockingQueue<T>();", "Kotlin": "val ch = Channel<T>()", "Python": "q = queue.Queue()", "Go": "ch := make(chan T)", "TypeScript": "// no built-in typed CSP channel; use async queues/libs", "Rust": "let (tx, rx) = std::sync::mpsc::channel();", "Odin": "c, _ := chan.create(chan.Chan(MyType), context.allocator)\ndefer chan.destroy(c)\n// core:sync/chan", "Gleam": "// BEAM processes + typed selectors/messages via gleam_erlang/OTP libraries"}}];
-const LANGS=["Java", "Kotlin", "Python", "Go", "TypeScript", "Rust", "Odin", "Gleam"];
-const active=new Set(LANGS);
-const q=document.getElementById('q'), app=document.getElementById('app'), chips=document.getElementById('chips'), count=document.getElementById('count');
-function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
-function drawChips(){chips.innerHTML=''; LANGS.forEach(lang=>{let b=document.createElement('button');b.className='chip '+(active.has(lang)?'':'off')+(lang==='Java'?' base':'');b.textContent=lang;b.onclick=()=>{if(lang==='Java') return; active.has(lang)?active.delete(lang):active.add(lang);drawChips();render();};chips.appendChild(b)})}
-function render(){const term=q.value.trim().toLowerCase(); const shown=DATA.filter(e=>{const hay=(e.category+' '+e.concept+' '+Object.values(e.snippets).join(' ')).toLowerCase();return !term||hay.includes(term)}); count.textContent=shown.length+' constructs'; app.innerHTML=''; if(!shown.length){app.innerHTML='<div class="empty">No matching constructs.</div>';return}; let last=''; shown.forEach(e=>{if(e.category!==last){let h=document.createElement('h2');h.className='category';h.textContent=e.category;app.appendChild(h);last=e.category} let card=document.createElement('section');card.className='card'; let visible=LANGS.filter(l=>active.has(l)); card.innerHTML='<div class="title">'+esc(e.concept)+'</div><div class="grid" style="--cols:'+visible.length+'">'+visible.map(lang=>'<div class="cell '+(lang==='Java'?'java':'')+'"><div class="lang">'+lang+'</div><pre>'+esc(e.snippets[lang])+'</pre></div>').join('')+'</div>';app.appendChild(card)})}
-q.addEventListener('input',render);drawChips();render();
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Java-first lookup for the same programming constructs in Kotlin, Python, Go, TypeScript, Rust, Odin, and Gleam. Built for CodeCrafters-style protocol work.">
+  <title>Java → Polyglot CodeCrafters Reference</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0e1116;
+      --panel: #151a22;
+      --panel2: #1b222c;
+      --text: #e7edf4;
+      --muted: #97a3b2;
+      --line: #2a3442;
+      --accent: #8ab4f8;
+      --java: #f4d06f;
+      --code: #0a0d12;
+      --warn: #f0b429;
+      --alert: #f28b82;
+      --ok: #81c995;
+    }
+    * { box-sizing: border-box }
+    html, body { margin: 0 }
+    body {
+      font: 15px/1.45 ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    a { color: var(--accent) }
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(14, 17, 22, .96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      padding: 18px 22px 14px;
+    }
+    h1 { font-size: 20px; margin: 0 0 4px }
+    .sub { color: var(--muted); margin: 0 0 14px }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center }
+    label.sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    input[type="search"] {
+      min-width: 280px;
+      flex: 1;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font: inherit;
+    }
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+    }
+    #chips, #cat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip-row.cats { margin-top: 8px }
+    .chip-label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    button, .chip {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font: inherit;
+    }
+    .chip.off { opacity: .4; text-decoration: line-through }
+    .chip.base { border-color: var(--accent) }
+    .count { color: var(--muted); font-size: 13px; margin-left: auto }
+    main { padding: 18px 22px 40px; max-width: 1800px; margin: auto }
+    .category { margin: 28px 0 10px; font-size: 18px }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 12px;
+      margin: 10px 0 16px;
+      overflow: hidden;
+      scroll-margin-top: 140px;
+    }
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .title {
+      appearance: none;
+      background: none;
+      border: 0;
+      border-radius: 8px;
+      color: inherit;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 2px 4px;
+      text-align: left;
+      flex: 1;
+    }
+    .title .chev { color: var(--muted); font-weight: 500; margin-right: 6px }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .badge.partial { color: var(--warn); border-color: #6b5420 }
+    .badge.different { color: var(--alert); border-color: #7a3b36 }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(var(--cols), minmax(300px, 1fr));
+      overflow: auto;
+    }
+    .cell {
+      min-width: 300px;
+      border-right: 1px solid var(--line);
+      background: var(--code);
+      display: flex;
+      flex-direction: column;
+    }
+    .cell:last-child { border-right: 0 }
+    .cell.java {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      box-shadow: 1px 0 0 var(--line);
+    }
+    .lang-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--panel2);
+      border-bottom: 1px solid var(--line);
+    }
+    .cell.java .lang-row { color: var(--java) }
+    .lang { flex: 1 }
+    .copy {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .copy.done { color: var(--ok); border-color: #2f5d3a }
+    pre {
+      margin: 0;
+      padding: 12px;
+      background: var(--code);
+      white-space: pre;
+      overflow-x: auto;
+      flex: 1;
+      min-height: 72px;
+      font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .note {
+      padding: 8px 12px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      border-top: 1px dashed var(--line);
+    }
+    .card.expanded .grid {
+      grid-template-columns: 1fr;
+      overflow: visible;
+    }
+    .card.expanded .cell {
+      min-width: 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .card.expanded .cell:last-child { border-bottom: 0 }
+    .card.expanded .cell.java {
+      position: static;
+      box-shadow: none;
+    }
+    .empty { color: var(--muted); padding: 40px; text-align: center }
+    footer {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 0 22px 40px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    footer nav { display: flex; flex-wrap: wrap; gap: 12px 18px }
+    @media (max-width: 700px) {
+      header { position: static }
+      .cell.java { position: static; box-shadow: none }
+      main, footer { padding-left: 12px; padding-right: 12px }
+      header { padding: 14px }
+      input[type="search"] { min-width: 100% }
+      .card { scroll-margin-top: 12px }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Java → Polyglot CodeCrafters Reference</h1>
+    <p class="sub">You know the concept. Find how it looks — and where a literal Java translation is the wrong model.</p>
+    <div class="controls">
+      <label class="sr-only" for="q">Search constructs</label>
+      <input id="q" type="search" placeholder="Search: tcp, map lookup, optional, bytes, test…" autofocus>
+      <span class="count" id="count" aria-live="polite"></span>
+      <div class="chip-row" id="lang-row">
+        <span class="chip-label">Languages</span>
+        <div id="chips"></div>
+      </div>
+      <div class="chip-row cats" id="cat-row">
+        <span class="chip-label">Categories</span>
+        <div id="cat-chips"></div>
+      </div>
+    </div>
+  </header>
+  <main id="app"></main>
+  <footer>
+    <nav>
+      <a href="MATRIX.md">Full matrix</a>
+      <a href="CODECRAFTERS-WORKFLOW.md">Workflow</a>
+      <a href="SOURCES.md">Sources</a>
+      <a href="languages/kotlin.md">Kotlin traps</a>
+      <a href="languages/python.md">Python</a>
+      <a href="languages/go.md">Go</a>
+      <a href="languages/typescript.md">TypeScript</a>
+      <a href="languages/rust.md">Rust</a>
+      <a href="languages/odin.md">Odin</a>
+      <a href="languages/gleam.md">Gleam</a>
+      <a id="repo-link" href="https://github.com/maccalsa/polyglot-codecrafters-reference">GitHub</a>
+    </nav>
+  </footer>
+  <script type="application/json" id="ref-data">
+[
+  {
+    "id": "immutable-binding",
+    "category": "Fundamentals",
+    "concept": "Immutable binding",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "final var x = 42;",
+      "Kotlin": "val x = 42",
+      "Python": "x = 42",
+      "Go": "x := 42",
+      "TypeScript": "const x = 42",
+      "Rust": "let x = 42;",
+      "Odin": "x := 42",
+      "Gleam": "let x = 42"
+    },
+    "notes": {
+      "Python": "No language-level const; convention and discipline only.",
+      "Go": "The binding itself is mutable. There is no val/const for locals.",
+      "Odin": ":= creates a variable. Use :: for compile-time constants."
+    }
+  },
+  {
+    "id": "constant",
+    "category": "Fundamentals",
+    "concept": "Constant",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "static final int PORT = 6379;",
+      "Kotlin": "const val PORT = 6379",
+      "Python": "PORT = 6379",
+      "Go": "const Port = 6379",
+      "TypeScript": "const PORT = 6379",
+      "Rust": "const PORT: u16 = 6379;",
+      "Odin": "PORT :: 6379",
+      "Gleam": "const port = 6379"
+    },
+    "notes": {
+      "Python": "Uppercase is convention only; the name remains assignable.",
+      "Kotlin": "const val is compile-time. Use val for runtime constants."
+    }
+  },
+  {
+    "id": "mutable-variable",
+    "category": "Fundamentals",
+    "concept": "Mutable variable",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var x = 1;\nx = 2;",
+      "Kotlin": "var x = 1\nx = 2",
+      "Python": "x = 1\nx = 2",
+      "Go": "x := 1\nx = 2",
+      "TypeScript": "let x = 1\nx = 2",
+      "Rust": "let mut x = 1;\nx = 2;",
+      "Odin": "x := 1\nx = 2",
+      "Gleam": "let x = 1\nlet x = 2"
+    },
+    "notes": {
+      "Gleam": "Bindings are immutable. Reusing the name is shadowing, not mutation."
+    }
+  },
+  {
+    "id": "function",
+    "category": "Fundamentals",
+    "concept": "Function",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "int add(int a, int b) {\n  return a + b;\n}",
+      "Kotlin": "fun add(a: Int, b: Int): Int = a + b",
+      "Python": "def add(a: int, b: int) -> int:\n    return a + b",
+      "Go": "func add(a, b int) int {\n    return a + b\n}",
+      "TypeScript": "function add(a: number, b: number): number {\n  return a + b\n}",
+      "Rust": "fn add(a: i32, b: i32) -> i32 {\n    a + b\n}",
+      "Odin": "add :: proc(a, b: int) -> int {\n    return a + b\n}",
+      "Gleam": "fn add(a: Int, b: Int) -> Int {\n  a + b\n}"
+    }
+  },
+  {
+    "id": "lambda",
+    "category": "Fundamentals",
+    "concept": "Anonymous function / lambda",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "x -> x * 2",
+      "Kotlin": "{ x -> x * 2 }",
+      "Python": "lambda x: x * 2",
+      "Go": "func(x int) int { return x * 2 }",
+      "TypeScript": "(x: number) => x * 2",
+      "Rust": "|x| x * 2",
+      "Odin": "proc(x: int) -> int { return x * 2 }",
+      "Gleam": "fn(x) { x * 2 }"
+    }
+  },
+  {
+    "id": "generic-function",
+    "category": "Fundamentals",
+    "concept": "Generic function",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "static <T> T id(T x) {\n  return x;\n}",
+      "Kotlin": "fun <T> id(x: T): T = x",
+      "Python": "def id[T](x: T) -> T:\n    return x",
+      "Go": "func id[T any](x T) T {\n    return x\n}",
+      "TypeScript": "function id<T>(x: T): T {\n  return x\n}",
+      "Rust": "fn id<T>(x: T) -> T {\n    x\n}",
+      "Odin": "id :: proc(x: $T) -> T {\n    return x\n}",
+      "Gleam": "fn id(x: a) -> a {\n  x\n}"
+    },
+    "notes": {
+      "Python": "Type-parameter syntax is 3.12+. Earlier: TypeVar."
+    }
+  },
+  {
+    "id": "tuple",
+    "category": "Fundamentals",
+    "concept": "Tuple / pair",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "record Pair<A, B>(A first, B second) {}",
+      "Kotlin": "val p = 1 to \"a\"",
+      "Python": "p = (1, \"a\")",
+      "Go": "return 1, \"a\"",
+      "TypeScript": "const p: [number, string] = [1, \"a\"]",
+      "Rust": "let p: (i32, &str) = (1, \"a\");",
+      "Odin": "a, b := get_pair()",
+      "Gleam": "let p = #(1, \"a\")"
+    },
+    "notes": {
+      "Kotlin": "to builds Pair<A, B>.",
+      "Go": "Multiple return values are the idiom; there is no first-class tuple.",
+      "Odin": "No general tuple type. Use a small struct or multiple return values."
+    }
+  },
+  {
+    "id": "entry-point",
+    "category": "Fundamentals",
+    "concept": "Entry point / main",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "public static void main(String[] args) {\n  ...\n}",
+      "Kotlin": "fun main(args: Array<String>) {\n  ...\n}",
+      "Python": "def main() -> None:\n    ...\n\nif __name__ == \"__main__\":\n    main()",
+      "Go": "func main() {\n    ...\n}",
+      "TypeScript": "async function main() {\n  ...\n}\nmain()",
+      "Rust": "fn main() {\n    ...\n}",
+      "Odin": "main :: proc() {\n    ...\n}",
+      "Gleam": "pub fn main() {\n  ...\n}"
+    },
+    "notes": {
+      "Go": "Must live in package main.",
+      "TypeScript": "Node treats the launched file as the entry. Browser/Deno differ."
+    }
+  },
+  {
+    "id": "record",
+    "category": "Types",
+    "concept": "Data carrier / record",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "record User(String name, int age) {}",
+      "Kotlin": "data class User(val name: String, val age: Int)",
+      "Python": "@dataclass\nclass User:\n    name: str\n    age: int",
+      "Go": "type User struct {\n    Name string\n    Age  int\n}",
+      "TypeScript": "type User = {\n  name: string\n  age: number\n}",
+      "Rust": "struct User {\n    name: String,\n    age: u32,\n}",
+      "Odin": "User :: struct {\n    name: string,\n    age: int,\n}",
+      "Gleam": "pub type User {\n  User(name: String, age: Int)\n}"
+    }
+  },
+  {
+    "id": "interface",
+    "category": "Types",
+    "concept": "Interface / trait / protocol",
+    "equivalence": "different",
+    "snippets": {
+      "Java": "interface Reader {\n  byte[] read();\n}",
+      "Kotlin": "interface Reader {\n  fun read(): ByteArray\n}",
+      "Python": "class Reader(Protocol):\n    def read(self) -> bytes: ...",
+      "Go": "type Reader interface {\n    Read([]byte) (int, error)\n}",
+      "TypeScript": "interface Reader {\n  read(): Uint8Array\n}",
+      "Rust": "trait Reader {\n    fn read(&mut self) -> Vec<u8>;\n}",
+      "Odin": "Reader :: struct {\n    read: proc(r: ^Reader) -> []u8,\n}",
+      "Gleam": "pub fn read(r: Reader) -> BitArray {\n  r.read(r)\n}"
+    },
+    "notes": {
+      "Go": "Satisfied implicitly; no implements clause.",
+      "Odin": "No interface construct. Use procedure fields, tagged unions, or plain procedures.",
+      "Gleam": "No typeclasses. Pass functions and custom types; do not look for implements."
+    }
+  },
+  {
+    "id": "enum",
+    "category": "Types",
+    "concept": "Enum / sum type",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "sealed interface Msg permits Ping, Quit {}\nrecord Ping(int id) implements Msg {}\nrecord Quit() implements Msg {}",
+      "Kotlin": "sealed interface Msg\ndata class Ping(val id: Int) : Msg\ndata object Quit : Msg",
+      "Python": "type Msg = Ping | Quit",
+      "Go": "type Msg interface{ isMsg() }\n\ntype Ping struct{ ID int }\ntype Quit struct{}\n\nfunc (Ping) isMsg() {}\nfunc (Quit) isMsg() {}",
+      "TypeScript": "type Msg =\n  | { kind: \"ping\"; id: number }\n  | { kind: \"quit\" }",
+      "Rust": "enum Msg {\n    Ping { id: i32 },\n    Quit,\n}",
+      "Odin": "Msg :: union {\n    Ping,\n    Quit,\n}",
+      "Gleam": "pub type Msg {\n  Ping(id: Int)\n  Quit\n}"
+    },
+    "notes": {
+      "Python": "3.12+ type alias. Define Ping/Quit as dataclasses or NamedTuples.",
+      "Go": "No native sum type. A sealed interface plus tagged structs is the usual stand-in."
+    }
+  },
+  {
+    "id": "optional",
+    "category": "Types",
+    "concept": "Optional / nullable",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "Optional<String> name",
+      "Kotlin": "val name: String?",
+      "Python": "name: str | None",
+      "Go": "var name *string",
+      "TypeScript": "let name: string | undefined",
+      "Rust": "let name: Option<String>",
+      "Odin": "name: Maybe(string)",
+      "Gleam": "let name: Option(String)"
+    },
+    "notes": {
+      "Go": "Pointer or (value, ok). nil is not Optional.",
+      "Odin": "Maybe(T) exists; many core APIs still use (value, ok)."
+    }
+  },
+  {
+    "id": "default-when-missing",
+    "category": "Types",
+    "concept": "Default when missing",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var n = opt.orElse(\"default\");",
+      "Kotlin": "val n = value ?: \"default\"",
+      "Python": "n = value if value is not None else \"default\"",
+      "Go": "if value == \"\" {\n    value = \"default\"\n}",
+      "TypeScript": "const n = value ?? \"default\"",
+      "Rust": "let n = value.unwrap_or(\"default\");",
+      "Odin": "n := value.? or_else \"default\"",
+      "Gleam": "let n = option.unwrap(value, \"default\")"
+    },
+    "notes": {
+      "Go": "Empty string is not absence. Prefer comma-ok on maps and pointers for missing values.",
+      "Odin": "or_else is for Maybe(T). Comma-ok APIs need an explicit check."
+    }
+  },
+  {
+    "id": "if-else",
+    "category": "Control flow",
+    "concept": "If / else",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "if (x > 0) {\n  ...\n} else {\n  ...\n}",
+      "Kotlin": "if (x > 0) {\n  ...\n} else {\n  ...\n}",
+      "Python": "if x > 0:\n    ...\nelse:\n    ...",
+      "Go": "if x > 0 {\n    ...\n} else {\n    ...\n}",
+      "TypeScript": "if (x > 0) {\n  ...\n} else {\n  ...\n}",
+      "Rust": "if x > 0 {\n    ...\n} else {\n    ...\n}",
+      "Odin": "if x > 0 {\n    ...\n} else {\n    ...\n}",
+      "Gleam": "case x > 0 {\n  True -> ...\n  False -> ...\n}"
+    },
+    "notes": {
+      "Gleam": "No if statement. case on Bool (or a richer type) is the branch."
+    }
+  },
+  {
+    "id": "pattern-match",
+    "category": "Control flow",
+    "concept": "Pattern match / switch",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "switch (msg) {\n  case Ping p -> handle(p);\n  case Quit q -> stop();\n}",
+      "Kotlin": "when (msg) {\n  is Ping -> handle(msg)\n  Quit -> stop()\n}",
+      "Python": "match msg:\n    case Ping(id):\n        ...\n    case Quit():\n        ...",
+      "Go": "switch v := msg.(type) {\ncase Ping:\n    _ = v\ncase Quit:\n    ...\n}",
+      "TypeScript": "switch (msg.kind) {\n  case \"ping\":\n    ...\n    break\n  case \"quit\":\n    ...\n}",
+      "Rust": "match msg {\n    Msg::Ping { id } => ...,\n    Msg::Quit => ...,\n}",
+      "Odin": "switch v in msg {\ncase Ping:\n    ...\ncase Quit:\n    ...\n}",
+      "Gleam": "case msg {\n  Ping(id) -> ...\n  Quit -> ...\n}"
+    }
+  },
+  {
+    "id": "for-each",
+    "category": "Control flow",
+    "concept": "For each",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "for (var x : xs) {\n  ...\n}",
+      "Kotlin": "for (x in xs) {\n  ...\n}",
+      "Python": "for x in xs:\n    ...",
+      "Go": "for _, x := range xs {\n    ...\n}",
+      "TypeScript": "for (const x of xs) {\n  ...\n}",
+      "Rust": "for x in xs {\n    ...\n}",
+      "Odin": "for x in xs {\n    ...\n}",
+      "Gleam": "list.each(xs, fn(x) { ... })"
+    },
+    "notes": {
+      "Gleam": "list.each is for side effects. Prefer list.map / list.filter for values."
+    }
+  },
+  {
+    "id": "index-iteration",
+    "category": "Control flow",
+    "concept": "Index + value iteration",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "for (int i = 0; i < xs.size(); i++) {\n  var x = xs.get(i);\n}",
+      "Kotlin": "for ((i, x) in xs.withIndex()) {\n  ...\n}",
+      "Python": "for i, x in enumerate(xs):\n    ...",
+      "Go": "for i, x := range xs {\n    ...\n}",
+      "TypeScript": "for (const [i, x] of xs.entries()) {\n  ...\n}",
+      "Rust": "for (i, x) in xs.iter().enumerate() {\n    ...\n}",
+      "Odin": "for x, i in xs {\n    ...\n}",
+      "Gleam": "list.index_map(xs, fn(x, i) { ... })"
+    },
+    "notes": {
+      "Gleam": "index_map returns a new list. It is not a side-effecting for-loop."
+    }
+  },
+  {
+    "id": "while",
+    "category": "Control flow",
+    "concept": "While loop",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "while (condition) {\n  ...\n}",
+      "Kotlin": "while (condition) {\n  ...\n}",
+      "Python": "while condition:\n    ...",
+      "Go": "for condition {\n    ...\n}",
+      "TypeScript": "while (condition) {\n  ...\n}",
+      "Rust": "while condition {\n    ...\n}",
+      "Odin": "for condition {\n    ...\n}",
+      "Gleam": "fn loop(n: Int) -> Int {\n  case n > 0 {\n    True -> loop(n - 1)\n    False -> n\n  }\n}"
+    },
+    "notes": {
+      "Go": "for is the only loop. while condition is for condition { }.",
+      "Odin": "Same as Go: for is while when given only a condition.",
+      "Gleam": "No while. Recurse, or use list/iterator functions."
+    }
+  },
+  {
+    "id": "early-return",
+    "category": "Control flow",
+    "concept": "Early return",
+    "equivalence": "different",
+    "snippets": {
+      "Java": "if (bad) {\n  return result;\n}",
+      "Kotlin": "if (bad) return result",
+      "Python": "if bad:\n    return result",
+      "Go": "if bad {\n    return result\n}",
+      "TypeScript": "if (bad) return result",
+      "Rust": "if bad {\n    return result;\n}",
+      "Odin": "if bad {\n    return result\n}",
+      "Gleam": "use x <- result.try(parse(s))\nuse y <- result.try(validate(x))\nOk(y)"
+    },
+    "notes": {
+      "Gleam": "No imperative early return. Structure with case or result.try pipelines."
+    }
+  },
+  {
+    "id": "list",
+    "category": "Collections",
+    "concept": "List / dynamic sequence",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var xs = new ArrayList<Integer>();",
+      "Kotlin": "val xs = mutableListOf<Int>()",
+      "Python": "xs: list[int] = []",
+      "Go": "xs := []int{}",
+      "TypeScript": "const xs: number[] = []",
+      "Rust": "let mut xs: Vec<i32> = Vec::new();",
+      "Odin": "xs := make([dynamic]int)\ndefer delete(xs)",
+      "Gleam": "let xs: List(Int) = []"
+    },
+    "notes": {
+      "Gleam": "Linked list, not a growable array. Prepend is cheap; append is not.",
+      "Odin": "Dynamic arrays allocate. You own the memory until delete."
+    }
+  },
+  {
+    "id": "array",
+    "category": "Collections",
+    "concept": "Fixed / contiguous array",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "int[] xs = new int[16];",
+      "Kotlin": "val xs = IntArray(16)",
+      "Python": "xs = [0] * 16",
+      "Go": "var xs [16]int",
+      "TypeScript": "const xs = new Int32Array(16)",
+      "Rust": "let xs = [0i32; 16];",
+      "Odin": "xs: [16]int",
+      "Gleam": "let bytes: BitArray = <<0, 0, 0, 0>>"
+    },
+    "notes": {
+      "Python": "list is the usual sequence. array.array / bytearray when you need packed storage.",
+      "Gleam": "List is linked. BitArray is for bytes. No general mutable array in the core language."
+    }
+  },
+  {
+    "id": "map-create",
+    "category": "Collections",
+    "concept": "Map / dictionary creation",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "var m = new HashMap<String, Integer>();",
+      "Kotlin": "val m = mutableMapOf<String, Int>()",
+      "Python": "m: dict[str, int] = {}",
+      "Go": "m := make(map[string]int)",
+      "TypeScript": "const m = new Map<string, number>()",
+      "Rust": "let mut m = HashMap::<String, i32>::new();",
+      "Odin": "m := make(map[string]int)\ndefer delete(m)",
+      "Gleam": "let m = dict.new()"
+    },
+    "notes": {
+      "TypeScript": "Map is not a plain object. Objects do not have a reliable key order or typed keys."
+    }
+  },
+  {
+    "id": "map-lookup",
+    "category": "Collections",
+    "concept": "Map lookup with presence",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "var v = m.get(key);\nif (v != null) {\n  ...\n}",
+      "Kotlin": "val v = m[key]\nif (v != null) {\n  ...\n}",
+      "Python": "if key in m:\n    v = m[key]",
+      "Go": "v, ok := m[key]\nif ok {\n    ...\n}",
+      "TypeScript": "const v = m.get(key)\nif (v !== undefined) {\n  ...\n}",
+      "Rust": "if let Some(v) = m.get(&key) {\n    ...\n}",
+      "Odin": "v, ok := m[key]\nif ok {\n    ...\n}",
+      "Gleam": "case dict.get(m, key) {\n  Ok(v) -> ...\n  Error(Nil) -> ...\n}"
+    },
+    "notes": {
+      "Go": "m[key] without ok returns the zero value for missing keys."
+    }
+  },
+  {
+    "id": "set",
+    "category": "Collections",
+    "concept": "Set creation",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var s = new HashSet<String>();",
+      "Kotlin": "val s = mutableSetOf<String>()",
+      "Python": "s: set[str] = set()",
+      "Go": "s := map[string]struct{}{}",
+      "TypeScript": "const s = new Set<string>()",
+      "Rust": "let mut s = HashSet::<String>::new();",
+      "Odin": "s := make(map[string]struct{})\ndefer delete(s)",
+      "Gleam": "let s = set.new()"
+    },
+    "notes": {
+      "Go": "No set type. map[T]struct{} is the usual idiom.",
+      "Odin": "Same map[T]struct{} idiom, or bit_set for enum-like keys."
+    }
+  },
+  {
+    "id": "filter",
+    "category": "Collections",
+    "concept": "Filter",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "var ys = xs.stream()\n    .filter(x -> x > 0)\n    .toList();",
+      "Kotlin": "val ys = xs.filter { it > 0 }",
+      "Python": "ys = [x for x in xs if x > 0]",
+      "Go": "ys := make([]int, 0, len(xs))\nfor _, x := range xs {\n    if x > 0 {\n        ys = append(ys, x)\n    }\n}",
+      "TypeScript": "const ys = xs.filter(x => x > 0)",
+      "Rust": "let ys: Vec<_> = xs.into_iter()\n    .filter(|x| *x > 0)\n    .collect();",
+      "Odin": "ys := make([dynamic]int)\nfor x in xs {\n    if x > 0 {\n        append(&ys, x)\n    }\n}",
+      "Gleam": "let ys = list.filter(xs, fn(x) { x > 0 })"
+    }
+  },
+  {
+    "id": "map-transform",
+    "category": "Collections",
+    "concept": "Map / transform",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "var ys = xs.stream()\n    .map(x -> x * 2)\n    .toList();",
+      "Kotlin": "val ys = xs.map { it * 2 }",
+      "Python": "ys = [x * 2 for x in xs]",
+      "Go": "ys := make([]int, len(xs))\nfor i, x := range xs {\n    ys[i] = x * 2\n}",
+      "TypeScript": "const ys = xs.map(x => x * 2)",
+      "Rust": "let ys: Vec<_> = xs.into_iter()\n    .map(|x| x * 2)\n    .collect();",
+      "Odin": "ys := make([dynamic]int)\nfor x in xs {\n    append(&ys, x * 2)\n}",
+      "Gleam": "let ys = list.map(xs, fn(x) { x * 2 })"
+    }
+  },
+  {
+    "id": "fold",
+    "category": "Collections",
+    "concept": "Fold / reduce",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "var total = xs.stream().reduce(0, Integer::sum);",
+      "Kotlin": "val total = xs.fold(0) { acc, x -> acc + x }",
+      "Python": "total = sum(xs)",
+      "Go": "total := 0\nfor _, x := range xs {\n    total += x\n}",
+      "TypeScript": "const total = xs.reduce((a, x) => a + x, 0)",
+      "Rust": "let total: i32 = xs.iter().sum();",
+      "Odin": "total := 0\nfor x in xs {\n    total += x\n}",
+      "Gleam": "let total = list.fold(xs, 0, fn(acc, x) { acc + x })"
+    }
+  },
+  {
+    "id": "interpolation",
+    "category": "Strings & bytes",
+    "concept": "String interpolation",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "var s = \"port=\" + port;",
+      "Kotlin": "val s = \"port=$port\"",
+      "Python": "s = f\"port={port}\"",
+      "Go": "s := fmt.Sprintf(\"port=%d\", port)",
+      "TypeScript": "const s = `port=${port}`",
+      "Rust": "let s = format!(\"port={port}\");",
+      "Odin": "s := fmt.tprintf(\"port=%d\", port)",
+      "Gleam": "let s = \"port=\" <> int.to_string(port)"
+    },
+    "notes": {
+      "Java": "No interpolation in everyday Java. STR templates exist but are still preview/unstable across versions."
+    }
+  },
+  {
+    "id": "string-to-bytes",
+    "category": "Strings & bytes",
+    "concept": "UTF-8 string → bytes",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "byte[] b = s.getBytes(StandardCharsets.UTF_8);",
+      "Kotlin": "val b = s.encodeToByteArray()",
+      "Python": "b = s.encode(\"utf-8\")",
+      "Go": "b := []byte(s)",
+      "TypeScript": "const b = new TextEncoder().encode(s)",
+      "Rust": "let b = s.as_bytes();",
+      "Odin": "b := transmute([]u8)s",
+      "Gleam": "let b = bit_array.from_string(s)"
+    },
+    "notes": {
+      "Rust": "as_bytes borrows. Clone with s.into_bytes() if you need an owned Vec<u8>.",
+      "Odin": "transmute is a view. Do not mutate. Clone if you need ownership."
+    }
+  },
+  {
+    "id": "bytes-to-string",
+    "category": "Strings & bytes",
+    "concept": "Bytes → UTF-8 string",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var s = new String(b, StandardCharsets.UTF_8);",
+      "Kotlin": "val s = b.decodeToString()",
+      "Python": "s = b.decode(\"utf-8\")",
+      "Go": "s := string(b)",
+      "TypeScript": "const s = new TextDecoder().decode(b)",
+      "Rust": "let s = std::str::from_utf8(&b)?;",
+      "Odin": "s := string(b)",
+      "Gleam": "let result = bit_array.to_string(b)"
+    },
+    "notes": {
+      "Rust": "Fails on invalid UTF-8. Use from_utf8_lossy if you want replacement.",
+      "Odin": "Conversion semantics and lifetime matter; clone if the bytes will move.",
+      "Gleam": "Result(String, Nil)."
+    }
+  },
+  {
+    "id": "split",
+    "category": "Strings & bytes",
+    "concept": "Split string",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "var parts = s.split(\":\", -1);",
+      "Kotlin": "val parts = s.split(\":\")",
+      "Python": "parts = s.split(\":\")",
+      "Go": "parts := strings.Split(s, \":\")",
+      "TypeScript": "const parts = s.split(\":\")",
+      "Rust": "let parts: Vec<_> = s.split(':').collect();",
+      "Odin": "parts := strings.split(s, \":\")",
+      "Gleam": "let parts = string.split(s, \":\")"
+    },
+    "notes": {
+      "Java": "Limit -1 keeps trailing empty strings. The no-limit overload discards them."
+    }
+  },
+  {
+    "id": "parse-int",
+    "category": "Strings & bytes",
+    "concept": "Parse integer",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "int n = Integer.parseInt(s);",
+      "Kotlin": "val n = s.toInt()",
+      "Python": "n = int(s)",
+      "Go": "n, err := strconv.Atoi(s)",
+      "TypeScript": "const n = Number.parseInt(s, 10)",
+      "Rust": "let n: i32 = s.parse()?;",
+      "Odin": "n, ok := strconv.parse_int(s)",
+      "Gleam": "let result = int.parse(s)"
+    },
+    "notes": {
+      "Kotlin": "toInt() throws. toIntOrNull() if absence is expected.",
+      "TypeScript": "Always pass radix 10. parseInt(\"08\") without it is not your friend in older JS.",
+      "Odin": "Inspect the returned type/options for your compiler version.",
+      "Gleam": "Result(Int, Nil)."
+    }
+  },
+  {
+    "id": "starts-with",
+    "category": "Strings & bytes",
+    "concept": "Starts-with / prefix",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "s.startsWith(\"+\")",
+      "Kotlin": "s.startsWith(\"+\")",
+      "Python": "s.startswith(\"+\")",
+      "Go": "strings.HasPrefix(s, \"+\")",
+      "TypeScript": "s.startsWith(\"+\")",
+      "Rust": "s.starts_with('+')",
+      "Odin": "strings.has_prefix(s, \"+\")",
+      "Gleam": "string.starts_with(s, \"+\")"
+    }
+  },
+  {
+    "id": "trim",
+    "category": "Strings & bytes",
+    "concept": "Trim whitespace",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "s.trim()",
+      "Kotlin": "s.trim()",
+      "Python": "s.strip()",
+      "Go": "strings.TrimSpace(s)",
+      "TypeScript": "s.trim()",
+      "Rust": "s.trim()",
+      "Odin": "strings.trim_space(s)",
+      "Gleam": "string.trim(s)"
+    }
+  },
+  {
+    "id": "slice",
+    "category": "Strings & bytes",
+    "concept": "Byte / string slice",
+    "equivalence": "different",
+    "snippets": {
+      "Java": "var part = s.substring(i, j);\nvar bytes = Arrays.copyOfRange(b, i, j);",
+      "Kotlin": "val part = s.substring(i, j)\nval bytes = b.copyOfRange(i, j)",
+      "Python": "part = s[i:j]\nbytes = b[i:j]",
+      "Go": "part := s[i:j]\nbytes := b[i:j]",
+      "TypeScript": "const part = s.slice(i, j)\nconst bytes = b.subarray(i, j)",
+      "Rust": "let part = &s[i..j];\nlet bytes = &b[i..j];",
+      "Odin": "part := s[i:j]\nbytes := b[i:j]",
+      "Gleam": "let part = string.slice(s, i, j - i)\nlet bytes = bit_array.slice(b, i, j - i)"
+    },
+    "notes": {
+      "Go": "Slices share the backing array. A downstream append can mutate callers.",
+      "Rust": "This is a borrow. The owner of s/b must outlive the slice.",
+      "TypeScript": "subarray is a view; slice() on Uint8Array copies.",
+      "Odin": "Slices are views. Copy if you need an independent buffer.",
+      "Gleam": "slice takes start + length, not start + end."
+    }
+  },
+  {
+    "id": "append-bytes",
+    "category": "Strings & bytes",
+    "concept": "Append bytes to a buffer",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var buf = new ByteArrayOutputStream();\nbuf.write(data);",
+      "Kotlin": "val buf = ByteArrayOutputStream()\nbuf.write(data)",
+      "Python": "buf = bytearray()\nbuf.extend(data)",
+      "Go": "buf = append(buf, data...)",
+      "TypeScript": "buf = Buffer.concat([buf, data])",
+      "Rust": "buf.extend_from_slice(data);",
+      "Odin": "append(&buf, ..data)",
+      "Gleam": "let buf = bit_array.append(buf, data)"
+    },
+    "notes": {
+      "Go": "append may reallocate. Reassign the result; the old slice header can be stale.",
+      "Gleam": "Immutable. append returns a new BitArray.",
+      "TypeScript": "Node Buffer. In the browser, concatenate Uint8Array manually."
+    }
+  },
+  {
+    "id": "represent-error",
+    "category": "Errors & resources",
+    "concept": "Represent recoverable error",
+    "equivalence": "different",
+    "snippets": {
+      "Java": "T method() throws IOException",
+      "Kotlin": "fun method(): T",
+      "Python": "def method() -> T:",
+      "Go": "func method() (T, error)",
+      "TypeScript": "function method(): T",
+      "Rust": "fn method() -> Result<T, E>",
+      "Odin": "method :: proc() -> (T, Error)",
+      "Gleam": "fn method() -> Result(T, E)"
+    },
+    "notes": {
+      "Kotlin": "Exceptions are unchecked. There is no throws clause.",
+      "Python": "Raise an exception. Typing does not encode failure.",
+      "TypeScript": "throw, or make failure explicit with a Result union.",
+      "Odin": "Explicit multi-return is the common shape."
+    }
+  },
+  {
+    "id": "propagate-error",
+    "category": "Errors & resources",
+    "concept": "Propagate error",
+    "equivalence": "different",
+    "snippets": {
+      "Java": "return method();",
+      "Kotlin": "return method()",
+      "Python": "return method()",
+      "Go": "v, err := method()\nif err != nil {\n    return zero, err\n}",
+      "TypeScript": "return method()",
+      "Rust": "let v = method()?;",
+      "Odin": "v, err := method()\nif err != nil {\n    return {}, err\n}",
+      "Gleam": "use v <- result.try(method())"
+    },
+    "notes": {
+      "Java": "Or declare throws and let it escape.",
+      "Kotlin": "Unchecked exceptions propagate automatically.",
+      "Python": "Exceptions propagate automatically.",
+      "TypeScript": "Thrown exceptions propagate. Result unions do not.",
+      "Gleam": "Or case method() { Ok(v) -> ... Error(e) -> Error(e) }."
+    }
+  },
+  {
+    "id": "cleanup",
+    "category": "Errors & resources",
+    "concept": "Cleanup / defer",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "try (var in = open()) {\n  ...\n}",
+      "Kotlin": "open().use { resource ->\n  ...\n}",
+      "Python": "with open_resource() as resource:\n    ...",
+      "Go": "r := open()\ndefer r.Close()",
+      "TypeScript": "const r = open()\ntry {\n  ...\n} finally {\n  r.close()\n}",
+      "Rust": "let r = open()?;",
+      "Odin": "r := open()\ndefer close(r)",
+      "Gleam": "use _ <- result.try(open())"
+    },
+    "notes": {
+      "Rust": "Drop runs at end of scope. No finally needed for owned resources.",
+      "TypeScript": "No language-level defer. try/finally, or runtime helpers (using, Disposable).",
+      "Gleam": "Managed runtime. Resource APIs are library-specific; there is no defer."
+    }
+  },
+  {
+    "id": "assertion",
+    "category": "Errors & resources",
+    "concept": "Assertion",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "assert x > 0;",
+      "Kotlin": "check(x > 0)",
+      "Python": "assert x > 0",
+      "Go": "if x <= 0 {\n    panic(\"assert\")\n}",
+      "TypeScript": "if (!(x > 0)) {\n  throw new Error(\"assertion failed\")\n}",
+      "Rust": "assert!(x > 0);",
+      "Odin": "assert(x > 0)",
+      "Gleam": "let assert True = x > 0"
+    },
+    "notes": {
+      "Java": "JVM assertions are off unless -ea.",
+      "Kotlin": "check throws. assert may depend on JVM -ea.",
+      "Go": "No built-in assert. Use an explicit if / panic, or a test helper."
+    }
+  },
+  {
+    "id": "cli-args",
+    "category": "I/O & process",
+    "concept": "CLI arguments",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "public static void main(String[] args) {\n  ...\n}",
+      "Kotlin": "fun main(args: Array<String>) {\n  ...\n}",
+      "Python": "args = sys.argv[1:]",
+      "Go": "args := os.Args[1:]",
+      "TypeScript": "const args = process.argv.slice(2)",
+      "Rust": "let args: Vec<String> = std::env::args().skip(1).collect();",
+      "Odin": "args := os.args",
+      "Gleam": "let args = argv.load().arguments"
+    },
+    "notes": {
+      "TypeScript": "Node. Deno uses Deno.args.",
+      "Gleam": "argv package, or gleam_erlang/os. Not in gleam_stdlib."
+    }
+  },
+  {
+    "id": "env-var",
+    "category": "I/O & process",
+    "concept": "Environment variable",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var v = System.getenv(\"PORT\");",
+      "Kotlin": "val v = System.getenv(\"PORT\")",
+      "Python": "v = os.getenv(\"PORT\")",
+      "Go": "v, ok := os.LookupEnv(\"PORT\")",
+      "TypeScript": "const v = process.env.PORT",
+      "Rust": "let v = std::env::var(\"PORT\");",
+      "Odin": "v, found := os.lookup_env(\"PORT\", context.allocator)\ndefer delete(v)",
+      "Gleam": "let result = envoy.get(\"PORT\")"
+    },
+    "notes": {
+      "TypeScript": "Node. Deno uses Deno.env.get.",
+      "Rust": "Result. Err if unset.",
+      "Gleam": "envoy or gleam_erlang. Target-specific; not in gleam_stdlib."
+    }
+  },
+  {
+    "id": "read-text-file",
+    "category": "I/O & process",
+    "concept": "Read whole text file",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var s = Files.readString(path);",
+      "Kotlin": "val s = File(path).readText()",
+      "Python": "s = Path(path).read_text()",
+      "Go": "b, err := os.ReadFile(path)\ns := string(b)",
+      "TypeScript": "const s = await readFile(path, \"utf8\")",
+      "Rust": "let s = std::fs::read_to_string(path)?;",
+      "Odin": "data, err := os.read_entire_file(path, context.allocator)\ndefer delete(data)",
+      "Gleam": "let result = simplifile.read(path)"
+    },
+    "notes": {
+      "TypeScript": "node:fs/promises. Browser has no filesystem.",
+      "Gleam": "simplifile is the usual package. Erlang vs JS backends differ."
+    }
+  },
+  {
+    "id": "stdin-stdout",
+    "category": "I/O & process",
+    "concept": "Stdin / stdout",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "var line = new BufferedReader(\n    new InputStreamReader(System.in)).readLine();\nSystem.out.print(s);",
+      "Kotlin": "val line = readln()\nprint(s)",
+      "Python": "line = sys.stdin.readline()\nsys.stdout.write(s)",
+      "Go": "line, err := bufio.NewReader(os.Stdin).ReadString('\\n')\nfmt.Print(s)",
+      "TypeScript": "const line = await once(process.stdin, \"data\")\nprocess.stdout.write(s)",
+      "Rust": "io::stdin().read_line(&mut line)?;\nprint!(\"{s}\");",
+      "Odin": "fmt.print(s)\n// read from os.stdin with a buffered helper",
+      "Gleam": "io.println(s)"
+    },
+    "notes": {
+      "TypeScript": "Node streams. once() is node:events.",
+      "Gleam": "gleam/io covers stdout. Stdin is target/package-specific."
+    }
+  },
+  {
+    "id": "read-binary-file",
+    "category": "I/O & process",
+    "concept": "Read binary file",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "byte[] b = Files.readAllBytes(path);",
+      "Kotlin": "val b = File(path).readBytes()",
+      "Python": "b = Path(path).read_bytes()",
+      "Go": "b, err := os.ReadFile(path)",
+      "TypeScript": "const b = await readFile(path)",
+      "Rust": "let b = std::fs::read(path)?;",
+      "Odin": "data, err := os.read_entire_file(path, context.allocator)\ndefer delete(data)",
+      "Gleam": "let result = simplifile.read_bits(path)"
+    },
+    "notes": {
+      "TypeScript": "node:fs/promises returns Buffer.",
+      "Gleam": "simplifile.read_bits. Confirm the name for your package version."
+    }
+  },
+  {
+    "id": "write-file",
+    "category": "I/O & process",
+    "concept": "Write file",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "Files.write(path, bytes);",
+      "Kotlin": "File(path).writeBytes(bytes)",
+      "Python": "Path(path).write_bytes(data)",
+      "Go": "err := os.WriteFile(path, data, 0644)",
+      "TypeScript": "await writeFile(path, data)",
+      "Rust": "std::fs::write(path, data)?;",
+      "Odin": "ok := os.write_entire_file(path, data)",
+      "Gleam": "let result = simplifile.write_bits(path, data)"
+    },
+    "notes": {
+      "TypeScript": "node:fs/promises.",
+      "Gleam": "simplifile. Erlang vs JS backends differ.",
+      "Odin": "Confirm the exact write helper for your compiler version."
+    }
+  },
+  {
+    "id": "test",
+    "category": "Testing",
+    "concept": "Test",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "@Test\nvoid parses() {\n  assertEquals(1, parse(\"1\"));\n}",
+      "Kotlin": "@Test\nfun parses() {\n  assertEquals(1, parse(\"1\"))\n}",
+      "Python": "def test_parses():\n    assert parse(\"1\") == 1",
+      "Go": "func TestParse(t *testing.T) {\n    if got := parse(\"1\"); got != 1 {\n        t.Fatal(got)\n    }\n}",
+      "TypeScript": "test(\"parses\", () => {\n  expect(parse(\"1\")).toBe(1)\n})",
+      "Rust": "#[test]\nfn parses() {\n    assert_eq!(1, parse(\"1\"));\n}",
+      "Odin": "@(test)\ntest_parses :: proc(t: ^testing.T) {\n    testing.expect_value(t, parse(\"1\"), 1)\n}",
+      "Gleam": "pub fn parses_test() {\n  assert parse(\"1\") == 1\n}"
+    },
+    "notes": {
+      "TypeScript": "Runner-dependent (node:test, vitest, jest).",
+      "Gleam": "File lives under test/ and ends in _test.gleam. Generated projects call gleeunit.main()."
+    }
+  },
+  {
+    "id": "run-tests",
+    "category": "Testing",
+    "concept": "Run tests",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "./gradlew test",
+      "Kotlin": "./gradlew test",
+      "Python": "pytest\npython -m unittest",
+      "Go": "go test ./...",
+      "TypeScript": "npm test",
+      "Rust": "cargo test",
+      "Odin": "odin test .",
+      "Gleam": "gleam test"
+    },
+    "notes": {
+      "Python": "pytest is common; unittest is stdlib.",
+      "TypeScript": "Script and runner are project-dependent."
+    }
+  },
+  {
+    "id": "tcp-listen",
+    "category": "Networking",
+    "concept": "TCP listen",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var server = new ServerSocket(port);",
+      "Kotlin": "val server = ServerSocket(port)",
+      "Python": "s = socket.socket()\ns.bind((\"127.0.0.1\", port))\ns.listen()",
+      "Go": "ln, err := net.Listen(\"tcp\", fmt.Sprintf(\":%d\", port))",
+      "TypeScript": "const server = net.createServer(handler)\nserver.listen(port)",
+      "Rust": "let listener = TcpListener::bind((\"127.0.0.1\", port))?;",
+      "Odin": "server, err := net.listen_tcp({net.IP4_Any, port})",
+      "Gleam": "glisten.new(init, loop)\n|> glisten.start(port)"
+    },
+    "notes": {
+      "TypeScript": "Node net. createServer already takes the connection handler.",
+      "Gleam": "No TCP in gleam_stdlib. On BEAM, glisten (or the CodeCrafters starter). Confirm the builder API for your version."
+    }
+  },
+  {
+    "id": "tcp-accept",
+    "category": "Networking",
+    "concept": "TCP accept / connection loop",
+    "equivalence": "different",
+    "snippets": {
+      "Java": "while (true) {\n  var socket = server.accept();\n  ...\n}",
+      "Kotlin": "while (true) {\n  val socket = server.accept()\n  ...\n}",
+      "Python": "while True:\n    conn, addr = s.accept()\n    ...",
+      "Go": "for {\n    conn, err := ln.Accept()\n    ...\n}",
+      "TypeScript": "net.createServer(socket => {\n  ...\n})",
+      "Rust": "for stream in listener.incoming() {\n    let stream = stream?;\n    ...\n}",
+      "Odin": "for {\n    client, source, err := net.accept_tcp(server)\n    ...\n}",
+      "Gleam": "fn loop(state, msg, conn) {\n  // glisten calls this per connection event\n}"
+    },
+    "notes": {
+      "TypeScript": "Node registers a callback. There is no blocking accept loop.",
+      "Gleam": "glisten owns acceptors. You write a handler, not an accept loop."
+    }
+  },
+  {
+    "id": "tcp-read",
+    "category": "Networking",
+    "concept": "Read bytes from TCP connection",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "int n = in.read(buffer);",
+      "Kotlin": "val n = input.read(buffer)",
+      "Python": "data = conn.recv(4096)",
+      "Go": "n, err := conn.Read(buf)",
+      "TypeScript": "socket.on(\"data\", (chunk: Buffer) => {\n  ...\n})",
+      "Rust": "let n = stream.read(&mut buf)?;",
+      "Odin": "n, err := net.recv_tcp(client, buf)",
+      "Gleam": "Packet(data) -> {\n  // BitArray from the connection\n}"
+    },
+    "notes": {
+      "Java": "n == -1 is EOF. n may be smaller than buffer.length.",
+      "TypeScript": "Push, not pull. You accumulate chunks; you do not call read().",
+      "Gleam": "Package-specific messages, typically BitArray."
+    }
+  },
+  {
+    "id": "tcp-write",
+    "category": "Networking",
+    "concept": "Write bytes to TCP connection",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "out.write(bytes);",
+      "Kotlin": "output.write(bytes)",
+      "Python": "conn.sendall(data)",
+      "Go": "_, err := conn.Write(data)",
+      "TypeScript": "socket.write(data)",
+      "Rust": "stream.write_all(data)?;",
+      "Odin": "n, err := net.send_tcp(client, data)",
+      "Gleam": "glisten.send(conn, data)"
+    },
+    "notes": {
+      "Go": "Write can be short. See write-all.",
+      "Python": "sendall retries until all bytes are queued.",
+      "TypeScript": "Node. write() may buffer; listen for drain if you flood the socket.",
+      "Gleam": "Name and arguments are package-version specific."
+    }
+  },
+  {
+    "id": "tcp-connect",
+    "category": "Networking",
+    "concept": "TCP client connect",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var socket = new Socket(\"127.0.0.1\", port);",
+      "Kotlin": "val socket = Socket(\"127.0.0.1\", port)",
+      "Python": "conn = socket.create_connection((\"127.0.0.1\", port))",
+      "Go": "conn, err := net.Dial(\"tcp\", addr)",
+      "TypeScript": "const socket = net.createConnection({ host, port })",
+      "Rust": "let stream = TcpStream::connect((\"127.0.0.1\", port))?;",
+      "Odin": "client, err := net.dial_tcp({net.IP4_Loopback, port})",
+      "Gleam": "// gleam add mug\nmug.connect(host, port, timeout_ms)"
+    },
+    "notes": {
+      "TypeScript": "Node net.",
+      "Gleam": "No stdlib client. mug is a common BEAM TCP client; confirm the API.",
+      "Odin": "Confirm dial helper and address type for your compiler version."
+    }
+  },
+  {
+    "id": "tcp-close",
+    "category": "Networking",
+    "concept": "Close / shutdown connection",
+    "equivalence": "same",
+    "snippets": {
+      "Java": "socket.close();",
+      "Kotlin": "socket.close()",
+      "Python": "conn.close()",
+      "Go": "conn.Close()",
+      "TypeScript": "socket.end()",
+      "Rust": "stream.shutdown(Shutdown::Both)?;",
+      "Odin": "net.close(client)",
+      "Gleam": "glisten.close(conn)"
+    },
+    "notes": {
+      "TypeScript": "end() half-closes after flushing. destroy() is abrupt.",
+      "Rust": "Drop also closes. shutdown is explicit half/full close.",
+      "Gleam": "Package-specific. Confirm the close helper."
+    }
+  },
+  {
+    "id": "buffered-read",
+    "category": "Networking",
+    "concept": "Read until delimiter or N bytes",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "var reader = new BufferedReader(\n    new InputStreamReader(in, StandardCharsets.UTF_8));\nString line = reader.readLine();",
+      "Kotlin": "val line = input.bufferedReader().readLine()",
+      "Python": "line = conn.makefile().readline()\nchunk = conn.recv(n)",
+      "Go": "r := bufio.NewReader(conn)\nline, err := r.ReadBytes('\\n')\nchunk := make([]byte, n)\n_, err = io.ReadFull(r, chunk)",
+      "TypeScript": "buf = Buffer.concat([buf, chunk])\nconst i = buf.indexOf(\"\\n\")\nif (i >= 0) {\n  const line = buf.subarray(0, i)\n  buf = buf.subarray(i + 1)\n}",
+      "Rust": "let mut r = BufReader::new(&stream);\nr.read_until(b'\\n', &mut line)?;\nr.read_exact(&mut chunk)?;",
+      "Odin": "// accumulate in a buffer; scan for \\n\nn, err := net.recv_tcp(client, buf[filled:])",
+      "Gleam": "let combined = bit_array.append(buf, chunk)\n// split on <<\"\\n\">> yourself"
+    },
+    "notes": {
+      "Java": "readLine() strips the newline and returns null at EOF.",
+      "TypeScript": "You must reassemble frames. data events are not message boundaries.",
+      "Odin": "No std bufio. Keep a filled count and compact the buffer after each frame.",
+      "Gleam": "If the package already delivers messages, still buffer if a frame can split."
+    }
+  },
+  {
+    "id": "write-all",
+    "category": "Networking",
+    "concept": "Write-all / short writes",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "out.write(bytes);\nout.flush();",
+      "Kotlin": "output.write(bytes)\noutput.flush()",
+      "Python": "conn.sendall(data)",
+      "Go": "_, err := io.Copy(conn, bytes.NewReader(data))",
+      "TypeScript": "const ok = socket.write(data)\nif (!ok) socket.once(\"drain\", resume)",
+      "Rust": "stream.write_all(data)?;",
+      "Odin": "for remaining := data; len(remaining) > 0; {\n    n, err := net.send_tcp(client, remaining)\n    remaining = remaining[n:]\n}",
+      "Gleam": "glisten.send(conn, data)"
+    },
+    "notes": {
+      "Java": "OutputStream.write(byte[]) writes the whole array or throws. Still flush sockets.",
+      "Go": "conn.Write can return a short write without err == nil. Loop or use io.Copy.",
+      "TypeScript": "write() returning false means the kernel buffer is full, not that data was lost.",
+      "Gleam": "Treat send as package-defined; do not assume POSIX short writes."
+    }
+  },
+  {
+    "id": "timeout",
+    "category": "Networking",
+    "concept": "Timeout / deadline",
+    "equivalence": "partial",
+    "snippets": {
+      "Java": "socket.setSoTimeout(1000);",
+      "Kotlin": "socket.soTimeout = 1000",
+      "Python": "conn.settimeout(1.0)",
+      "Go": "conn.SetDeadline(time.Now().Add(time.Second))",
+      "TypeScript": "socket.setTimeout(1000)",
+      "Rust": "stream.set_read_timeout(Some(Duration::from_secs(1)))?;",
+      "Odin": "net.set_option(client, net.Receive_Timeout, 1 * time.Second)",
+      "Gleam": "process.send_after(self(), 1000, Timeout)"
+    },
+    "notes": {
+      "Java": "SoTimeout applies to blocking reads; it throws SocketTimeoutException.",
+      "Go": "Deadline is absolute. Reset it on each request if you want a per-read timeout.",
+      "TypeScript": "Fires a timeout event; it does not throw from write().",
+      "Odin": "Option names are version-sensitive. Compiler-check this.",
+      "Gleam": "BEAM process timers, not socket options. Package APIs may wrap this."
+    }
+  },
+  {
+    "id": "spawn",
+    "category": "Concurrency",
+    "concept": "Spawn concurrent work",
+    "equivalence": "different",
+    "snippets": {
+      "Java": "Thread.startVirtualThread(() -> work());",
+      "Kotlin": "launch { work() }",
+      "Python": "threading.Thread(target=work).start()",
+      "Go": "go work()",
+      "TypeScript": "await work()",
+      "Rust": "std::thread::spawn(|| work());",
+      "Odin": "thread.create_and_start(proc() { work() })",
+      "Gleam": "process.spawn(fn() { work() })"
+    },
+    "notes": {
+      "Java": "Virtual threads are Java 21+. Older: new Thread(work).start().",
+      "Kotlin": "Needs a coroutine scope. launch is not a language keyword you can call anywhere.",
+      "Python": "Or asyncio.create_task(...) for cooperative async.",
+      "TypeScript": "The event loop already interleaves I/O. Use Worker for CPU parallelism.",
+      "Odin": "See core:thread; exact helpers vary by version.",
+      "Gleam": "gleam_erlang on BEAM. JS target has no process.spawn."
+    }
+  },
+  {
+    "id": "channel",
+    "category": "Concurrency",
+    "concept": "Channel / message passing",
+    "equivalence": "different",
+    "snippets": {
+      "Java": "var q = new LinkedBlockingQueue<T>();",
+      "Kotlin": "val ch = Channel<T>()",
+      "Python": "q = queue.Queue()",
+      "Go": "ch := make(chan T)",
+      "TypeScript": "const q: T[] = []",
+      "Rust": "let (tx, rx) = std::sync::mpsc::channel();",
+      "Odin": "c, _ := chan.create(chan.Chan(MyType), context.allocator)\ndefer chan.destroy(c)",
+      "Gleam": "process.send(pid, msg)\nlet selector = process.new_selector()"
+    },
+    "notes": {
+      "TypeScript": "No built-in CSP channel. Use an async queue or a library.",
+      "Odin": "core:sync/chan. Confirm create/destroy for your version.",
+      "Gleam": "BEAM processes plus typed selectors via gleam_erlang / OTP libraries."
+    }
+  }
+]
+    </script>
+  <script>
+    const LANGS = ["Java", "Kotlin", "Python", "Go", "TypeScript", "Rust", "Odin", "Gleam"];
+    const LANG_KEY = "polyglot-langs";
+    const CAT_KEY = "polyglot-cats";
+    const q = document.getElementById("q");
+    const app = document.getElementById("app");
+    const chips = document.getElementById("chips");
+    const catChips = document.getElementById("cat-chips");
+    const count = document.getElementById("count");
+    const expanded = new Set();
+    let DATA = [];
+    let CATS = [];
+    let activeLangs = new Set(LANGS);
+    let activeCats = new Set();
+
+    function esc(s) {
+      return String(s).replace(/[&<>"]/g, (c) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;"
+      }[c]));
+    }
+
+    function loadSet(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return new Set(fallback);
+        const list = JSON.parse(raw);
+        if (!Array.isArray(list)) return new Set(fallback);
+        return new Set(list);
+      } catch {
+        return new Set(fallback);
+      }
+    }
+
+    function saveSet(key, set) {
+      try { localStorage.setItem(key, JSON.stringify([...set])); } catch { /* ignore */ }
+    }
+
+    function parseUrl() {
+      const params = new URLSearchParams(location.search);
+      const term = params.get("q");
+      if (term !== null) q.value = term;
+      const langs = params.get("lang");
+      if (langs) {
+        activeLangs = new Set(["Java", ...langs.split(",").map((s) => s.trim()).filter((l) => LANGS.includes(l))]);
+      } else {
+        const stored = loadSet(LANG_KEY, LANGS);
+        activeLangs = new Set(["Java", ...[...stored].filter((l) => LANGS.includes(l))]);
+      }
+      const cats = params.get("cat");
+      if (cats) {
+        activeCats = new Set(cats.split(",").map((s) => s.trim()).filter((c) => CATS.includes(c)));
+        if (!activeCats.size) activeCats = new Set(CATS);
+      } else {
+        const stored = loadSet(CAT_KEY, CATS);
+        activeCats = new Set([...stored].filter((c) => CATS.includes(c)));
+        if (!activeCats.size) activeCats = new Set(CATS);
+      }
+      if (location.hash) expanded.add(location.hash.slice(1));
+    }
+
+    function writeUrl() {
+      const params = new URLSearchParams();
+      const term = q.value.trim();
+      if (term) params.set("q", term);
+      if (activeLangs.size !== LANGS.length) {
+        params.set("lang", LANGS.filter((l) => activeLangs.has(l) && l !== "Java").join(","));
+      }
+      if (activeCats.size !== CATS.length) {
+        params.set("cat", CATS.filter((c) => activeCats.has(c)).join(","));
+      }
+      const qs = params.toString();
+      const hash = location.hash;
+      const next = (qs ? "?" + qs : "") + hash;
+      history.replaceState(null, "", next || location.pathname);
+    }
+
+    function drawLangChips() {
+      chips.innerHTML = "";
+      LANGS.forEach((lang) => {
+        const b = document.createElement("button");
+        const on = activeLangs.has(lang);
+        b.className = "chip" + (on ? "" : " off") + (lang === "Java" ? " base" : "");
+        b.type = "button";
+        b.textContent = lang;
+        b.setAttribute("aria-pressed", String(on));
+        if (lang === "Java") {
+          b.title = "Java is the baseline column";
+        } else {
+          b.addEventListener("click", () => {
+            if (activeLangs.has(lang)) activeLangs.delete(lang);
+            else activeLangs.add(lang);
+            saveSet(LANG_KEY, activeLangs);
+            drawLangChips();
+            writeUrl();
+            render();
+          });
+        }
+        chips.appendChild(b);
+      });
+    }
+
+    function drawCatChips() {
+      catChips.innerHTML = "";
+      CATS.forEach((cat) => {
+        const b = document.createElement("button");
+        const on = activeCats.has(cat);
+        b.className = "chip" + (on ? "" : " off");
+        b.type = "button";
+        b.textContent = cat;
+        b.setAttribute("aria-pressed", String(on));
+        b.addEventListener("click", () => {
+          if (activeCats.has(cat)) {
+            if (activeCats.size > 1) activeCats.delete(cat);
+          } else {
+            activeCats.add(cat);
+          }
+          saveSet(CAT_KEY, activeCats);
+          drawCatChips();
+          writeUrl();
+          render();
+        });
+        catChips.appendChild(b);
+      });
+    }
+
+    function badgeHtml(eq) {
+      if (eq === "partial") return '<span class="badge partial">partial match</span>';
+      if (eq === "different") return '<span class="badge different">wrong Java model</span>';
+      return "";
+    }
+
+    function copyButton(code) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "copy";
+      b.textContent = "Copy";
+      b.addEventListener("click", async (ev) => {
+        ev.stopPropagation();
+        try {
+          await navigator.clipboard.writeText(code);
+        } catch {
+          const ta = document.createElement("textarea");
+          ta.value = code;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+        }
+        b.textContent = "Copied";
+        b.classList.add("done");
+        setTimeout(() => {
+          b.textContent = "Copy";
+          b.classList.remove("done");
+        }, 1200);
+      });
+      return b;
+    }
+
+    function render() {
+      const term = q.value.trim().toLowerCase();
+      const shown = DATA.filter((e) => {
+        if (!activeCats.has(e.category)) return false;
+        if (!term) return true;
+        const notes = e.notes ? Object.values(e.notes).join(" ") : "";
+        const hay = (e.category + " " + e.concept + " " + Object.values(e.snippets).join(" ") + " " + notes).toLowerCase();
+        return hay.includes(term);
+      });
+      count.textContent = shown.length + " constructs";
+      app.innerHTML = "";
+      if (!shown.length) {
+        app.innerHTML = '<div class="empty">No matching constructs.</div>';
+        return;
+      }
+      let last = "";
+      shown.forEach((e) => {
+        if (e.category !== last) {
+          const h = document.createElement("h2");
+          h.className = "category";
+          h.textContent = e.category;
+          app.appendChild(h);
+          last = e.category;
+        }
+        const card = document.createElement("section");
+        card.className = "card" + (expanded.has(e.id) ? " expanded" : "");
+        card.id = e.id;
+        const visible = LANGS.filter((l) => activeLangs.has(l));
+        const titleRow = document.createElement("div");
+        titleRow.className = "title-row";
+        const title = document.createElement("button");
+        title.type = "button";
+        title.className = "title";
+        title.setAttribute("aria-expanded", String(expanded.has(e.id)));
+        title.innerHTML = '<span class="chev">' + (expanded.has(e.id) ? "▾" : "▸") + "</span>" + esc(e.concept);
+        title.addEventListener("click", () => {
+          if (expanded.has(e.id)) expanded.delete(e.id);
+          else expanded.add(e.id);
+          history.replaceState(null, "", (location.search || "") + "#" + e.id);
+          render();
+          document.getElementById(e.id)?.scrollIntoView({ block: "nearest" });
+        });
+        titleRow.appendChild(title);
+        if (e.equivalence && e.equivalence !== "same") {
+          const wrap = document.createElement("div");
+          wrap.innerHTML = badgeHtml(e.equivalence);
+          titleRow.appendChild(wrap.firstChild);
+        }
+        const grid = document.createElement("div");
+        grid.className = "grid";
+        grid.style.setProperty("--cols", String(visible.length));
+        visible.forEach((lang) => {
+          const cell = document.createElement("div");
+          cell.className = "cell" + (lang === "Java" ? " java" : "");
+          const langRow = document.createElement("div");
+          langRow.className = "lang-row";
+          const langEl = document.createElement("div");
+          langEl.className = "lang";
+          langEl.textContent = lang;
+          langRow.appendChild(langEl);
+          langRow.appendChild(copyButton(e.snippets[lang] || ""));
+          const pre = document.createElement("pre");
+          pre.textContent = e.snippets[lang] || "";
+          cell.appendChild(langRow);
+          cell.appendChild(pre);
+          const note = e.notes && e.notes[lang];
+          if (note) {
+            const n = document.createElement("div");
+            n.className = "note";
+            n.textContent = note;
+            cell.appendChild(n);
+          }
+          grid.appendChild(cell);
+        });
+        card.appendChild(titleRow);
+        card.appendChild(grid);
+        app.appendChild(card);
+      });
+    }
+
+    function boot(data) {
+      DATA = data;
+      CATS = [...new Set(DATA.map((e) => e.category))];
+      if (location.hostname.endsWith("github.io")) {
+        const repo = "https://github.com/maccalsa/polyglot-codecrafters-reference/blob/main/";
+        document.querySelectorAll("footer a[href$='.md']").forEach((a) => {
+          a.href = repo + a.getAttribute("href");
+        });
+      }
+      parseUrl();
+      drawLangChips();
+      drawCatChips();
+      render();
+      writeUrl();
+      if (location.hash) {
+        document.getElementById(location.hash.slice(1))?.scrollIntoView();
+      }
+    }
+
+    q.addEventListener("input", () => {
+      writeUrl();
+      render();
+    });
+
+    (async function init() {
+      let data = [];
+      try {
+        data = JSON.parse(document.getElementById("ref-data").textContent || "[]");
+      } catch {
+        data = [];
+      }
+      try {
+        const res = await fetch("reference.json", { cache: "no-store" });
+        if (res.ok) data = await res.json();
+      } catch { /* file:// uses the inlined copy */ }
+      boot(data);
+    })();
+  </script>
+</body>
+</html>
