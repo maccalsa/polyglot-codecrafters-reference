@@ -1,0 +1,646 @@
+[
+  {
+    "category": "Fundamentals",
+    "concept": "Immutable binding",
+    "snippets": {
+      "Java": "final var x = 42;",
+      "Kotlin": "val x = 42",
+      "Python": "x = 42  # no language-level const",
+      "Go": "x := 42  // binding itself is mutable",
+      "TypeScript": "const x = 42",
+      "Rust": "let x = 42;",
+      "Odin": "x := 42  // variable; use :: for constants",
+      "Gleam": "let x = 42"
+    }
+  },
+  {
+    "category": "Fundamentals",
+    "concept": "Constant",
+    "snippets": {
+      "Java": "static final int PORT = 6379;",
+      "Kotlin": "const val PORT = 6379",
+      "Python": "PORT = 6379  # convention: uppercase",
+      "Go": "const Port = 6379",
+      "TypeScript": "const PORT = 6379",
+      "Rust": "const PORT: u16 = 6379;",
+      "Odin": "PORT :: 6379",
+      "Gleam": "const port = 6379"
+    }
+  },
+  {
+    "category": "Fundamentals",
+    "concept": "Mutable variable",
+    "snippets": {
+      "Java": "var x = 1;\nx = 2;",
+      "Kotlin": "var x = 1\nx = 2",
+      "Python": "x = 1\nx = 2",
+      "Go": "x := 1\nx = 2",
+      "TypeScript": "let x = 1\nx = 2",
+      "Rust": "let mut x = 1;\nx = 2;",
+      "Odin": "x := 1\nx = 2",
+      "Gleam": "// bindings are immutable\nlet x = 1\nlet x = 2  // shadowing"
+    }
+  },
+  {
+    "category": "Fundamentals",
+    "concept": "Function",
+    "snippets": {
+      "Java": "int add(int a, int b) {\n  return a + b;\n}",
+      "Kotlin": "fun add(a: Int, b: Int): Int = a + b",
+      "Python": "def add(a: int, b: int) -> int:\n    return a + b",
+      "Go": "func add(a, b int) int {\n    return a + b\n}",
+      "TypeScript": "function add(a: number, b: number): number {\n  return a + b\n}",
+      "Rust": "fn add(a: i32, b: i32) -> i32 {\n    a + b\n}",
+      "Odin": "add :: proc(a, b: int) -> int {\n    return a + b\n}",
+      "Gleam": "fn add(a: Int, b: Int) -> Int {\n  a + b\n}"
+    }
+  },
+  {
+    "category": "Fundamentals",
+    "concept": "Anonymous function / lambda",
+    "snippets": {
+      "Java": "x -> x * 2",
+      "Kotlin": "{ x -> x * 2 }",
+      "Python": "lambda x: x * 2",
+      "Go": "func(x int) int { return x * 2 }",
+      "TypeScript": "(x: number) => x * 2",
+      "Rust": "|x| x * 2",
+      "Odin": "proc(x: int) -> int { return x * 2 }",
+      "Gleam": "fn(x) { x * 2 }"
+    }
+  },
+  {
+    "category": "Fundamentals",
+    "concept": "Generic function",
+    "snippets": {
+      "Java": "static <T> T id(T x) { return x; }",
+      "Kotlin": "fun <T> id(x: T): T = x",
+      "Python": "def id[T](x: T) -> T:\n    return x  # Python 3.12+",
+      "Go": "func id[T any](x T) T { return x }",
+      "TypeScript": "function id<T>(x: T): T { return x }",
+      "Rust": "fn id<T>(x: T) -> T { x }",
+      "Odin": "id :: proc(x: $T) -> T { return x }",
+      "Gleam": "fn id(x: a) -> a { x }"
+    }
+  },
+  {
+    "category": "Fundamentals",
+    "concept": "Tuple / pair",
+    "snippets": {
+      "Java": "record Pair<A,B>(A first, B second) {}",
+      "Kotlin": "val p = 1 to \"a\"\n// Pair<Int, String>",
+      "Python": "p = (1, \"a\")",
+      "Go": "// multiple return values are idiomatic\nreturn 1, \"a\"",
+      "TypeScript": "const p: [number, string] = [1, \"a\"]",
+      "Rust": "let p: (i32, &str) = (1, \"a\");",
+      "Odin": "// no general first-class tuple type\n// use a small struct, or multiple return values:\na, b := get_pair()",
+      "Gleam": "let p = #(1, \"a\")"
+    }
+  },
+  {
+    "category": "Types",
+    "concept": "Data carrier / record",
+    "snippets": {
+      "Java": "record User(String name, int age) {}",
+      "Kotlin": "data class User(val name: String, val age: Int)",
+      "Python": "@dataclass\nclass User:\n    name: str\n    age: int",
+      "Go": "type User struct {\n    Name string\n    Age  int\n}",
+      "TypeScript": "type User = { name: string; age: number }",
+      "Rust": "struct User {\n    name: String,\n    age: u32,\n}",
+      "Odin": "User :: struct {\n    name: string,\n    age: int,\n}",
+      "Gleam": "pub type User {\n  User(name: String, age: Int)\n}"
+    }
+  },
+  {
+    "category": "Types",
+    "concept": "Interface / trait / protocol",
+    "snippets": {
+      "Java": "interface Reader {\n  byte[] read();\n}",
+      "Kotlin": "interface Reader {\n  fun read(): ByteArray\n}",
+      "Python": "class Reader(Protocol):\n    def read(self) -> bytes: ...",
+      "Go": "type Reader interface {\n    Read([]byte) (int, error)\n}",
+      "TypeScript": "interface Reader {\n  read(): Uint8Array\n}",
+      "Rust": "trait Reader {\n    fn read(&mut self) -> Vec<u8>;\n}",
+      "Odin": "// no interface construct; use procedures,\n// tagged unions, or procedure fields",
+      "Gleam": "// no interfaces/typeclasses; model behaviour\n// with functions and custom types"
+    }
+  },
+  {
+    "category": "Types",
+    "concept": "Enum / sum type",
+    "snippets": {
+      "Java": "sealed interface Msg permits Ping, Quit {}\nrecord Ping(int id) implements Msg {}\nrecord Quit() implements Msg {}",
+      "Kotlin": "sealed interface Msg\ndata class Ping(val id: Int): Msg\ndata object Quit: Msg",
+      "Python": "type Msg = Ping | Quit  # 3.12 type alias",
+      "Go": "// usually tagged struct/interface; no native sum type",
+      "TypeScript": "type Msg =\n  | { kind: \"ping\"; id: number }\n  | { kind: \"quit\" }",
+      "Rust": "enum Msg {\n    Ping { id: i32 },\n    Quit,\n}",
+      "Odin": "Msg :: union { Ping, Quit }",
+      "Gleam": "pub type Msg {\n  Ping(id: Int)\n  Quit\n}"
+    }
+  },
+  {
+    "category": "Types",
+    "concept": "Optional / nullable",
+    "snippets": {
+      "Java": "Optional<String> name",
+      "Kotlin": "val name: String?",
+      "Python": "name: str | None",
+      "Go": "// often pointer or (value, ok)\nvar name *string",
+      "TypeScript": "let name: string | undefined",
+      "Rust": "let name: Option<String>",
+      "Odin": "name: Maybe(string)\n// core APIs also commonly use (value, ok)",
+      "Gleam": "let name: Option(String)"
+    }
+  },
+  {
+    "category": "Types",
+    "concept": "Default when missing",
+    "snippets": {
+      "Java": "var n = opt.orElse(\"default\");",
+      "Kotlin": "val n = value ?: \"default\"",
+      "Python": "n = value if value is not None else \"default\"",
+      "Go": "if value == \"\" { value = \"default\" }",
+      "TypeScript": "const n = value ?? \"default\"",
+      "Rust": "let n = value.unwrap_or(\"default\");",
+      "Odin": "n := value.? or_else \"default\"  // for Maybe(string)",
+      "Gleam": "let n = option.unwrap(value, \"default\")"
+    }
+  },
+  {
+    "category": "Control flow",
+    "concept": "If / else",
+    "snippets": {
+      "Java": "if (x > 0) {\n  ...\n} else {\n  ...\n}",
+      "Kotlin": "if (x > 0) {\n  ...\n} else {\n  ...\n}",
+      "Python": "if x > 0:\n    ...\nelse:\n    ...",
+      "Go": "if x > 0 {\n    ...\n} else {\n    ...\n}",
+      "TypeScript": "if (x > 0) {\n  ...\n} else {\n  ...\n}",
+      "Rust": "if x > 0 {\n    ...\n} else {\n    ...\n}",
+      "Odin": "if x > 0 {\n    ...\n} else {\n    ...\n}",
+      "Gleam": "case x > 0 {\n  True -> ...\n  False -> ...\n}"
+    }
+  },
+  {
+    "category": "Control flow",
+    "concept": "Pattern match / switch",
+    "snippets": {
+      "Java": "switch (msg) {\n  case Ping p -> handle(p);\n  case Quit q -> stop();\n}",
+      "Kotlin": "when (msg) {\n  is Ping -> handle(msg)\n  Quit -> stop()\n}",
+      "Python": "match msg:\n    case Ping(id): ...\n    case Quit(): ...",
+      "Go": "switch v := msg.(type) {\ncase Ping:\n    _ = v\n}",
+      "TypeScript": "switch (msg.kind) {\n  case \"ping\": ...\n}",
+      "Rust": "match msg {\n    Msg::Ping { id } => ...,\n    Msg::Quit => ...,\n}",
+      "Odin": "switch v in msg {\ncase Ping:\n    ...\ncase Quit:\n    ...\n}",
+      "Gleam": "case msg {\n  Ping(id) -> ...\n  Quit -> ...\n}"
+    }
+  },
+  {
+    "category": "Control flow",
+    "concept": "For each",
+    "snippets": {
+      "Java": "for (var x : xs) { ... }",
+      "Kotlin": "for (x in xs) { ... }",
+      "Python": "for x in xs:\n    ...",
+      "Go": "for _, x := range xs {\n    ...\n}",
+      "TypeScript": "for (const x of xs) {\n  ...\n}",
+      "Rust": "for x in xs {\n    ...\n}",
+      "Odin": "for x in xs {\n    ...\n}",
+      "Gleam": "list.each(xs, fn(x) { ... })"
+    }
+  },
+  {
+    "category": "Control flow",
+    "concept": "Index + value iteration",
+    "snippets": {
+      "Java": "for (int i = 0; i < xs.size(); i++) {\n  var x = xs.get(i);\n}",
+      "Kotlin": "for ((i, x) in xs.withIndex()) { ... }",
+      "Python": "for i, x in enumerate(xs):\n    ...",
+      "Go": "for i, x := range xs {\n    ...\n}",
+      "TypeScript": "for (const [i, x] of xs.entries()) { ... }",
+      "Rust": "for (i, x) in xs.iter().enumerate() { ... }",
+      "Odin": "for x, i in xs {\n    ...\n}",
+      "Gleam": "list.index_map(xs, fn(x, i) { ... })"
+    }
+  },
+  {
+    "category": "Control flow",
+    "concept": "While loop",
+    "snippets": {
+      "Java": "while (condition) { ... }",
+      "Kotlin": "while (condition) { ... }",
+      "Python": "while condition:\n    ...",
+      "Go": "for condition {\n    ...\n}",
+      "TypeScript": "while (condition) { ... }",
+      "Rust": "while condition { ... }",
+      "Odin": "for condition {\n    ...\n}",
+      "Gleam": "// no while loop; use recursion or iterator/list functions"
+    }
+  },
+  {
+    "category": "Control flow",
+    "concept": "Early return",
+    "snippets": {
+      "Java": "if (bad) return result;",
+      "Kotlin": "if (bad) return result",
+      "Python": "if bad:\n    return result",
+      "Go": "if bad {\n    return result\n}",
+      "TypeScript": "if (bad) return result",
+      "Rust": "if bad { return result; }",
+      "Odin": "if bad { return result }",
+      "Gleam": "// structure with case/result pipelines; no imperative early-return idiom"
+    }
+  },
+  {
+    "category": "Collections",
+    "concept": "List / dynamic sequence",
+    "snippets": {
+      "Java": "var xs = new ArrayList<Integer>();",
+      "Kotlin": "val xs = mutableListOf<Int>()",
+      "Python": "xs: list[int] = []",
+      "Go": "xs := []int{}",
+      "TypeScript": "const xs: number[] = []",
+      "Rust": "let mut xs: Vec<i32> = Vec::new();",
+      "Odin": "xs := make([dynamic]int)\ndefer delete(xs)",
+      "Gleam": "let xs: List(Int) = []"
+    }
+  },
+  {
+    "category": "Collections",
+    "concept": "Fixed / contiguous array",
+    "snippets": {
+      "Java": "int[] xs = new int[16];",
+      "Kotlin": "val xs = IntArray(16)",
+      "Python": "# list is usual general sequence\nxs = [0] * 16",
+      "Go": "var xs [16]int",
+      "TypeScript": "const xs = new Int32Array(16)",
+      "Rust": "let xs = [0i32; 16];",
+      "Odin": "xs: [16]int",
+      "Gleam": "// List is linked; BitArray for bytes.\n// No general mutable array in core language."
+    }
+  },
+  {
+    "category": "Collections",
+    "concept": "Map / dictionary creation",
+    "snippets": {
+      "Java": "var m = new HashMap<String, Integer>();",
+      "Kotlin": "val m = mutableMapOf<String, Int>()",
+      "Python": "m: dict[str, int] = {}",
+      "Go": "m := make(map[string]int)",
+      "TypeScript": "const m = new Map<string, number>()",
+      "Rust": "let mut m = HashMap::<String, i32>::new();",
+      "Odin": "m := make(map[string]int)\ndefer delete(m)",
+      "Gleam": "let m = dict.new()"
+    }
+  },
+  {
+    "category": "Collections",
+    "concept": "Map lookup with presence",
+    "snippets": {
+      "Java": "var v = m.get(key);\nif (v != null) { ... }",
+      "Kotlin": "val v = m[key]\nif (v != null) { ... }",
+      "Python": "if key in m:\n    v = m[key]",
+      "Go": "v, ok := m[key]\nif ok { ... }",
+      "TypeScript": "const v = m.get(key)\nif (v !== undefined) { ... }",
+      "Rust": "if let Some(v) = m.get(&key) { ... }",
+      "Odin": "v, ok := m[key]\nif ok { ... }",
+      "Gleam": "case dict.get(m, key) {\n  Ok(v) -> ...\n  Error(Nil) -> ...\n}"
+    }
+  },
+  {
+    "category": "Collections",
+    "concept": "Set creation",
+    "snippets": {
+      "Java": "var s = new HashSet<String>();",
+      "Kotlin": "val s = mutableSetOf<String>()",
+      "Python": "s: set[str] = set()",
+      "Go": "s := map[string]struct{}{}",
+      "TypeScript": "const s = new Set<string>()",
+      "Rust": "let mut s = HashSet::<String>::new();",
+      "Odin": "// idiom: map[T]struct{} or bit_set for enum-like keys",
+      "Gleam": "let s = set.new()"
+    }
+  },
+  {
+    "category": "Collections",
+    "concept": "Filter",
+    "snippets": {
+      "Java": "var ys = xs.stream().filter(x -> x > 0).toList();",
+      "Kotlin": "val ys = xs.filter { it > 0 }",
+      "Python": "ys = [x for x in xs if x > 0]",
+      "Go": "ys := make([]int, 0, len(xs))\nfor _, x := range xs { if x > 0 { ys = append(ys, x) } }",
+      "TypeScript": "const ys = xs.filter(x => x > 0)",
+      "Rust": "let ys: Vec<_> = xs.into_iter().filter(|x| *x > 0).collect();",
+      "Odin": "ys := make([dynamic]int)\nfor x in xs { if x > 0 { append(&ys, x) } }",
+      "Gleam": "let ys = list.filter(xs, fn(x) { x > 0 })"
+    }
+  },
+  {
+    "category": "Collections",
+    "concept": "Map / transform",
+    "snippets": {
+      "Java": "var ys = xs.stream().map(x -> x * 2).toList();",
+      "Kotlin": "val ys = xs.map { it * 2 }",
+      "Python": "ys = [x * 2 for x in xs]",
+      "Go": "ys := make([]int, len(xs))\nfor i, x := range xs { ys[i] = x * 2 }",
+      "TypeScript": "const ys = xs.map(x => x * 2)",
+      "Rust": "let ys: Vec<_> = xs.into_iter().map(|x| x * 2).collect();",
+      "Odin": "ys := make([dynamic]int)\nfor x in xs { append(&ys, x*2) }",
+      "Gleam": "let ys = list.map(xs, fn(x) { x * 2 })"
+    }
+  },
+  {
+    "category": "Collections",
+    "concept": "Fold / reduce",
+    "snippets": {
+      "Java": "var total = xs.stream().reduce(0, Integer::sum);",
+      "Kotlin": "val total = xs.fold(0) { acc, x -> acc + x }",
+      "Python": "total = sum(xs)",
+      "Go": "total := 0\nfor _, x := range xs { total += x }",
+      "TypeScript": "const total = xs.reduce((a, x) => a + x, 0)",
+      "Rust": "let total: i32 = xs.iter().sum();",
+      "Odin": "total := 0\nfor x in xs { total += x }",
+      "Gleam": "let total = list.fold(xs, 0, fn(acc, x) { acc + x })"
+    }
+  },
+  {
+    "category": "Strings & bytes",
+    "concept": "String interpolation",
+    "snippets": {
+      "Java": "var s = \"port=\" + port;",
+      "Kotlin": "val s = \"port=$port\"",
+      "Python": "s = f\"port={port}\"",
+      "Go": "s := fmt.Sprintf(\"port=%d\", port)",
+      "TypeScript": "const s = `port=${port}`",
+      "Rust": "let s = format!(\"port={port}\");",
+      "Odin": "s := fmt.tprintf(\"port=%d\", port)",
+      "Gleam": "let s = \"port=\" <> int.to_string(port)"
+    }
+  },
+  {
+    "category": "Strings & bytes",
+    "concept": "UTF-8 string → bytes",
+    "snippets": {
+      "Java": "byte[] b = s.getBytes(StandardCharsets.UTF_8);",
+      "Kotlin": "val b = s.encodeToByteArray()",
+      "Python": "b = s.encode(\"utf-8\")",
+      "Go": "b := []byte(s)",
+      "TypeScript": "const b = new TextEncoder().encode(s)",
+      "Rust": "let b = s.as_bytes();",
+      "Odin": "b := transmute([]u8)s  // view; do not mutate\n// clone if ownership/mutation is needed",
+      "Gleam": "let b = bit_array.from_string(s)"
+    }
+  },
+  {
+    "category": "Strings & bytes",
+    "concept": "Bytes → UTF-8 string",
+    "snippets": {
+      "Java": "var s = new String(b, StandardCharsets.UTF_8);",
+      "Kotlin": "val s = b.decodeToString()",
+      "Python": "s = b.decode(\"utf-8\")",
+      "Go": "s := string(b)",
+      "TypeScript": "const s = new TextDecoder().decode(b)",
+      "Rust": "let s = std::str::from_utf8(&b)?;",
+      "Odin": "s := string(b)  // conversion semantics matter; clone if lifetime requires",
+      "Gleam": "let result = bit_array.to_string(b)  // Result(String, Nil)"
+    }
+  },
+  {
+    "category": "Strings & bytes",
+    "concept": "Split string",
+    "snippets": {
+      "Java": "var parts = s.split(\":\", -1);",
+      "Kotlin": "val parts = s.split(\":\")",
+      "Python": "parts = s.split(\":\")",
+      "Go": "parts := strings.Split(s, \":\")",
+      "TypeScript": "const parts = s.split(\":\")",
+      "Rust": "let parts: Vec<_> = s.split(':').collect();",
+      "Odin": "parts := strings.split(s, \":\")",
+      "Gleam": "let parts = string.split(s, \":\")"
+    }
+  },
+  {
+    "category": "Strings & bytes",
+    "concept": "Parse integer",
+    "snippets": {
+      "Java": "int n = Integer.parseInt(s);",
+      "Kotlin": "val n = s.toInt()\n// or toIntOrNull()",
+      "Python": "n = int(s)",
+      "Go": "n, err := strconv.Atoi(s)",
+      "TypeScript": "const n = Number.parseInt(s, 10)",
+      "Rust": "let n: i32 = s.parse()?;",
+      "Odin": "n, ok := strconv.parse_int(s)\n// inspect returned type/options for your Odin version",
+      "Gleam": "let result = int.parse(s)  // Result(Int, Nil)"
+    }
+  },
+  {
+    "category": "Errors & resources",
+    "concept": "Represent recoverable error",
+    "snippets": {
+      "Java": "T method() throws IOException",
+      "Kotlin": "fun method(): T  // exceptions unchecked",
+      "Python": "def method() -> T:  # raises exception",
+      "Go": "func method() (T, error)",
+      "TypeScript": "function method(): T  // throw, or use an explicit Result union",
+      "Rust": "fn method() -> Result<T, E>",
+      "Odin": "method :: proc() -> (T, Error)\n// explicit multi-return is common",
+      "Gleam": "fn method() -> Result(T, E)"
+    }
+  },
+  {
+    "category": "Errors & resources",
+    "concept": "Propagate error",
+    "snippets": {
+      "Java": "return method(); // or throws",
+      "Kotlin": "return method()  // exception propagates",
+      "Python": "return method()  # exception propagates",
+      "Go": "v, err := method()\nif err != nil { return zero, err }",
+      "TypeScript": "return method() // thrown exception propagates",
+      "Rust": "let v = method()?;",
+      "Odin": "v, err := method()\nif err != nil { return {}, err }",
+      "Gleam": "use v <- result.try(method())\n// or case method() { ... }"
+    }
+  },
+  {
+    "category": "Errors & resources",
+    "concept": "Cleanup / defer",
+    "snippets": {
+      "Java": "try (var in = open()) {\n  ...\n}",
+      "Kotlin": "open().use { resource -> ... }",
+      "Python": "with open_resource() as resource:\n    ...",
+      "Go": "r := open()\ndefer r.Close()",
+      "TypeScript": "// often try/finally; explicit resource management depends on runtime",
+      "Rust": "let r = open()?;\n// Drop runs at end of scope",
+      "Odin": "r := open()\ndefer close(r)",
+      "Gleam": "// immutable/managed runtime; resource APIs are library/runtime-specific"
+    }
+  },
+  {
+    "category": "Errors & resources",
+    "concept": "Assertion",
+    "snippets": {
+      "Java": "assert x > 0;",
+      "Kotlin": "check(x > 0)\n// assert(...) may be JVM-assertion dependent",
+      "Python": "assert x > 0",
+      "Go": "// no built-in assert; explicit if/panic or test helper",
+      "TypeScript": "if (!(x > 0)) throw new Error(\"assertion failed\")",
+      "Rust": "assert!(x > 0);",
+      "Odin": "assert(x > 0)",
+      "Gleam": "let assert True = x > 0"
+    }
+  },
+  {
+    "category": "I/O & process",
+    "concept": "CLI arguments",
+    "snippets": {
+      "Java": "var args = ... // main(String[] args)",
+      "Kotlin": "fun main(args: Array<String>) { ... }",
+      "Python": "args = sys.argv[1:]",
+      "Go": "args := os.Args[1:]",
+      "TypeScript": "const args = process.argv.slice(2) // Node",
+      "Rust": "let args: Vec<String> = std::env::args().skip(1).collect();",
+      "Odin": "args := os.args",
+      "Gleam": "// target/runtime-specific; on Erlang use gleam_erlang/os or starter helpers"
+    }
+  },
+  {
+    "category": "I/O & process",
+    "concept": "Environment variable",
+    "snippets": {
+      "Java": "var v = System.getenv(\"PORT\");",
+      "Kotlin": "val v = System.getenv(\"PORT\")",
+      "Python": "v = os.getenv(\"PORT\")",
+      "Go": "v, ok := os.LookupEnv(\"PORT\")",
+      "TypeScript": "const v = process.env.PORT // Node",
+      "Rust": "let v = std::env::var(\"PORT\");",
+      "Odin": "v, found := os.lookup_env(\"PORT\", context.allocator)\ndefer delete(v)",
+      "Gleam": "// target/runtime-specific; Erlang helpers live outside gleam_stdlib"
+    }
+  },
+  {
+    "category": "I/O & process",
+    "concept": "Read whole text file",
+    "snippets": {
+      "Java": "var s = Files.readString(path);",
+      "Kotlin": "val s = File(path).readText()",
+      "Python": "s = Path(path).read_text()",
+      "Go": "b, err := os.ReadFile(path)\ns := string(b)",
+      "TypeScript": "const s = await readFile(path, \"utf8\") // node:fs/promises",
+      "Rust": "let s = std::fs::read_to_string(path)?;",
+      "Odin": "data, err := os.read_entire_file(path, context.allocator)\ndefer delete(data)",
+      "Gleam": "// Erlang target: gleam_erlang/file; JS target: runtime FFI/package"
+    }
+  },
+  {
+    "category": "Testing",
+    "concept": "Test",
+    "snippets": {
+      "Java": "@Test\nvoid parses() {\n  assertEquals(1, parse(\"1\"));\n}",
+      "Kotlin": "@Test\nfun parses() {\n  assertEquals(1, parse(\"1\"))\n}",
+      "Python": "def test_parses():\n    assert parse(\"1\") == 1",
+      "Go": "func TestParse(t *testing.T) {\n    if got := parse(\"1\"); got != 1 { t.Fatal(got) }\n}",
+      "TypeScript": "test(\"parses\", () => {\n  expect(parse(\"1\")).toBe(1)\n}) // runner-dependent",
+      "Rust": "#[test]\nfn parses() {\n    assert_eq!(1, parse(\"1\"));\n}",
+      "Odin": "@(test)\ntest_parses :: proc(t: ^testing.T) {\n    testing.expect_value(t, parse(\"1\"), 1)\n}",
+      "Gleam": "// in test/..._test.gleam\npub fn parses_test() {\n  assert parse(\"1\") == 1\n}\n// generated projects use gleeunit.main() as test main"
+    }
+  },
+  {
+    "category": "Testing",
+    "concept": "Run tests",
+    "snippets": {
+      "Java": "./gradlew test",
+      "Kotlin": "./gradlew test",
+      "Python": "pytest  # common\npython -m unittest  # stdlib",
+      "Go": "go test ./...",
+      "TypeScript": "npm test  # project/runner-dependent",
+      "Rust": "cargo test",
+      "Odin": "odin test .",
+      "Gleam": "gleam test"
+    }
+  },
+  {
+    "category": "Networking",
+    "concept": "TCP listen",
+    "snippets": {
+      "Java": "var server = new ServerSocket(port);",
+      "Kotlin": "val server = ServerSocket(port)",
+      "Python": "s = socket.socket()\ns.bind((\"127.0.0.1\", port))\ns.listen()",
+      "Go": "ln, err := net.Listen(\"tcp\", fmt.Sprintf(\":%d\", port))",
+      "TypeScript": "const server = net.createServer(handler)\nserver.listen(port) // Node",
+      "Rust": "let listener = TcpListener::bind((\"127.0.0.1\", port))?;",
+      "Odin": "server, err := net.listen_tcp({net.IP4_Any, port})",
+      "Gleam": "// no TCP API in gleam_stdlib. On BEAM, use a package such as glisten\n// (or CodeCrafters starter/runtime FFI)."
+    }
+  },
+  {
+    "category": "Networking",
+    "concept": "TCP accept / connection loop",
+    "snippets": {
+      "Java": "while (true) {\n  var socket = server.accept();\n  ...\n}",
+      "Kotlin": "while (true) {\n  val socket = server.accept()\n}",
+      "Python": "while True:\n    conn, addr = s.accept()",
+      "Go": "for {\n    conn, err := ln.Accept()\n    ...\n}",
+      "TypeScript": "net.createServer(socket => {\n  ...\n}) // callback/event-driven Node",
+      "Rust": "for stream in listener.incoming() {\n    let stream = stream?;\n    ...\n}",
+      "Odin": "for {\n    client, source, err := net.accept_tcp(server)\n    ...\n}",
+      "Gleam": "// package/runtime-specific; glisten manages acceptors and handlers"
+    }
+  },
+  {
+    "category": "Networking",
+    "concept": "Read bytes from TCP connection",
+    "snippets": {
+      "Java": "int n = in.read(buffer);",
+      "Kotlin": "val n = input.read(buffer)",
+      "Python": "data = conn.recv(4096)",
+      "Go": "n, err := conn.Read(buf)",
+      "TypeScript": "socket.on(\"data\", (chunk: Buffer) => { ... }) // Node",
+      "Rust": "let n = stream.read(&mut buf)?;",
+      "Odin": "n, err := net.recv_tcp(client, buf)",
+      "Gleam": "// package/runtime-specific; typically BitArray messages/data"
+    }
+  },
+  {
+    "category": "Networking",
+    "concept": "Write bytes to TCP connection",
+    "snippets": {
+      "Java": "out.write(bytes);",
+      "Kotlin": "output.write(bytes)",
+      "Python": "conn.sendall(data)",
+      "Go": "_, err := conn.Write(data)",
+      "TypeScript": "socket.write(data) // Node",
+      "Rust": "stream.write_all(data)?;",
+      "Odin": "n, err := net.send_tcp(client, data)",
+      "Gleam": "// package/runtime-specific; e.g. glisten connection send APIs"
+    }
+  },
+  {
+    "category": "Concurrency",
+    "concept": "Spawn concurrent work",
+    "snippets": {
+      "Java": "Thread.startVirtualThread(() -> work());",
+      "Kotlin": "launch { work() } // coroutine scope",
+      "Python": "threading.Thread(target=work).start()\n# or asyncio.create_task(...)",
+      "Go": "go work()",
+      "TypeScript": "// event loop for async I/O; Worker for CPU parallelism",
+      "Rust": "std::thread::spawn(|| work());",
+      "Odin": "thread.create_and_start(proc() { work() })\n// exact API may vary; see core:thread",
+      "Gleam": "process.spawn(fn() { work() }) // gleam_erlang on BEAM"
+    }
+  },
+  {
+    "category": "Concurrency",
+    "concept": "Channel / message passing",
+    "snippets": {
+      "Java": "var q = new LinkedBlockingQueue<T>();",
+      "Kotlin": "val ch = Channel<T>()",
+      "Python": "q = queue.Queue()",
+      "Go": "ch := make(chan T)",
+      "TypeScript": "// no built-in typed CSP channel; use async queues/libs",
+      "Rust": "let (tx, rx) = std::sync::mpsc::channel();",
+      "Odin": "c, _ := chan.create(chan.Chan(MyType), context.allocator)\ndefer chan.destroy(c)\n// core:sync/chan",
+      "Gleam": "// BEAM processes + typed selectors/messages via gleam_erlang/OTP libraries"
+    }
+  }
+]
